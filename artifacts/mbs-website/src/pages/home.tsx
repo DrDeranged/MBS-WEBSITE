@@ -5,6 +5,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeading } from "@/components/motion/SectionHeading";
 import { TiltCard } from "@/components/motion/TiltCard";
 import { GradientBand } from "@/components/motion/GradientBand";
+import { AmbientVideo } from "@/components/AmbientVideo";
 import { useState } from "react";
 
 // ── Icon with navy-circled-initial fallback ───────────────────────────────────
@@ -272,6 +273,12 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── A½) AMBIENT VIDEO BAND ─────────────────────────────────────── */}
+      <AmbientVideo
+        heading="Funding that moves as fast as your business"
+        body="One application. Multiple lenders. Real offers in 24 hours."
+      />
 
       {/* ── B) TRUST STRIP ─────────────────────────────────────────────── */}
       <section style={{ backgroundColor: "#F5F8FB" }} className="py-10 border-y border-border">
