@@ -18,6 +18,7 @@ import Calculator from '@/pages/calculator';
 import About from '@/pages/about';
 import Contact from '@/pages/contact';
 import Blog from '@/pages/blog';
+import BlogArticle from '@/pages/blog-article';
 import PrivacyPolicy from '@/pages/privacy-policy';
 import TermsOfService from '@/pages/terms-of-service';
 
@@ -69,6 +70,7 @@ function Router() {
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
           <Route path="/blog" component={Blog} />
+          <Route path="/blog/:slug" component={BlogArticle} />
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           {/* Legacy WordPress route → external apply URL */}
