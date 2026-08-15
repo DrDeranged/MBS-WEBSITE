@@ -10,6 +10,7 @@ import {
   useLocation,
   Router as WouterRouter,
 } from 'wouter';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import Home from '@/pages/home';
 import Calculator from '@/pages/calculator';
@@ -21,19 +22,44 @@ import TermsOfService from '@/pages/terms-of-service';
 
 const queryClient = new QueryClient();
 
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.15, ease: 'easeOut' } },
+  exit:    { opacity: 0, transition: { duration: 0.1, ease: 'easeIn' } },
+};
+
+function PageTransition({ children }: { children: ReactNode }) {
+  const [location] = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function Router() {
   return (
     <RoutedErrorBoundary>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/calculator" component={Calculator} />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/privacy-policy" component={PrivacyPolicy} />
-        <Route path="/terms-of-service" component={TermsOfService} />
-        <Route component={NotFound} />
-      </Switch>
+      <PageTransition>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/calculator" component={Calculator} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route path="/blog" component={Blog} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-service" component={TermsOfService} />
+          <Route component={NotFound} />
+        </Switch>
+      </PageTransition>
     </RoutedErrorBoundary>
   );
 }
