@@ -1,6 +1,11 @@
 import { Layout } from "@/components/layout/layout";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function PrivacyPolicy() {
+  usePageMeta(
+    "Privacy Policy | My Business Solutions",
+    "Read the My Business Solutions privacy policy to understand how we collect, use, and protect your information.",
+  );
   return (
     <Layout>
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32 min-h-[60vh] flex flex-col items-center justify-center text-center">

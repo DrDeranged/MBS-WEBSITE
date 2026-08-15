@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout/layout";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { CountUp } from "@/components/motion/CountUp";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeading } from "@/components/motion/SectionHeading";
@@ -224,13 +225,17 @@ function CalcMock() {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
+  usePageMeta(
+    "My Business Solutions | Smart Business Funding, Simplified",
+    "Apply once and access multiple business funding options tailored to your company's needs. Compare offers, choose confidently, and move forward faster.",
+  );
+
   return (
     <Layout>
       {/* ── A) HERO ─────────────────────────────────────────────────────── */}
       <section className="min-h-[calc(100vh-80px)] flex items-center bg-background pt-8 pb-16 md:pb-24">
         <div className="mx-auto max-w-6xl px-6 w-full">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: copy */}
             <Reveal delay={0}>
               <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1.1] tracking-tight text-foreground mb-5">
                 Smart business funding, simplified
@@ -261,8 +266,6 @@ export default function Home() {
                 </a>
               </div>
             </Reveal>
-
-            {/* Right: mock panel */}
             <Reveal delay={150}>
               <HeroMockPanel />
             </Reveal>
@@ -333,15 +336,9 @@ export default function Home() {
       >
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <SectionHeading
-              eyebrow="Funding made simple"
-              heading="How it works"
-            />
+            <SectionHeading eyebrow="Funding made simple" heading="How it works" />
           </Reveal>
-
-          {/* Desktop: horizontal timeline */}
           <div className="hidden md:grid md:grid-cols-4 gap-0 relative">
-            {/* Connector line */}
             <div
               className="absolute top-[28px] left-[12.5%] right-[12.5%] h-px"
               style={{ backgroundColor: "#DCE4EC" }}
@@ -355,11 +352,7 @@ export default function Home() {
                   >
                     {step.num}
                   </div>
-                  <SectionIcon
-                    slug={step.icon}
-                    alt={step.title}
-                    className="w-10 h-10 mb-4 object-contain"
-                  />
+                  <SectionIcon slug={step.icon} alt={step.title} className="w-10 h-10 mb-4 object-contain" />
                   <h3 className="font-heading font-semibold text-base text-foreground mb-3">
                     {step.title}
                   </h3>
@@ -370,8 +363,6 @@ export default function Home() {
               </Reveal>
             ))}
           </div>
-
-          {/* Mobile: stacked */}
           <div className="flex flex-col gap-6 md:hidden">
             {STEPS.map((step, i) => (
               <Reveal key={step.num} delay={i * 80}>
@@ -383,11 +374,7 @@ export default function Home() {
                     {step.num}
                   </div>
                   <div>
-                    <SectionIcon
-                      slug={step.icon}
-                      alt={step.title}
-                      className="w-8 h-8 mb-2 object-contain"
-                    />
+                    <SectionIcon slug={step.icon} alt={step.title} className="w-8 h-8 mb-2 object-contain" />
                     <h3 className="font-heading font-semibold text-base text-foreground mb-1">
                       {step.title}
                     </h3>
@@ -406,10 +393,7 @@ export default function Home() {
       <section className="py-24 md:py-32 bg-background">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <SectionHeading
-              eyebrow="Why choose us"
-              heading="Why businesses choose us"
-            />
+            <SectionHeading eyebrow="Why choose us" heading="Why businesses choose us" />
           </Reveal>
           <div className="grid sm:grid-cols-2 gap-6">
             {WHY_US.map((item, i) => (
@@ -447,8 +431,7 @@ export default function Home() {
                 Estimate your payments
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
-                Adjust funding amount, term length, and rate to preview estimated
-                payments.
+                Adjust funding amount, term length, and rate to preview estimated payments.
               </p>
               <a
                 href="/calculator"
