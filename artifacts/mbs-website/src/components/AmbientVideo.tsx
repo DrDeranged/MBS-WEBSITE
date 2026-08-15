@@ -26,11 +26,22 @@ export function AmbientVideo({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    // iOS Safari requires the muted property set imperatively — the JSX
+    // attribute alone is not honoured before the play() call.
+    video.muted = true;
+
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
       video.pause();
     } else {
-      video.play().catch(() => {/* autoplay blocked — poster shows */});
+      video.play().catch(() => {
+        // iOS rejects play() before any bytes arrive even with preload="metadata".
+        // Retry once when the browser signals it has enough data to begin.
+        const retry = () => {
+          video.play().catch(() => {/* autoplay truly blocked — poster stays */});
+        };
+        video.addEventListener("canplay", retry, { once: true });
+      });
     }
     const onChange = (e: MediaQueryListEvent) => {
       if (e.matches) video.pause();
@@ -54,7 +65,7 @@ export function AmbientVideo({
         muted
         loop
         playsInline
-        preload="none"
+        preload="metadata"
         aria-hidden="true"
       >
         <source src="/videos/hero-band.webm" type="video/webm" />
