@@ -180,3 +180,17 @@
   .results-pulse { animation: none; }
   .digit-roll    { animation: none; }
 }
+
+/* ── MbsAssist chat widget animations ─────────────────────────────────────── */
+@keyframes mbsDot {
+  0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
+  40%           { opacity: 1;    transform: scale(1.1); }
+}
+@keyframes mbsBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes mbsDot   { 0%, 100% { opacity: 0.6; } }
+  @keyframes mbsBlink { 0%, 100% { opacity: 1;   } }
+}
