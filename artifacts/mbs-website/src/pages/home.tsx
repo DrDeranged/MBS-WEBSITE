@@ -6,15 +6,22 @@ import { TiltCard } from "@/components/motion/TiltCard";
 import { GradientBand } from "@/components/motion/GradientBand";
 import { useState } from "react";
 
-// ── Product icon with navy-circled-initial fallback ──────────────────────────
-function ProductIcon({ slug, title }: { slug: string; title: string }) {
+// ── Icon with navy-circled-initial fallback ───────────────────────────────────
+function SectionIcon({
+  slug,
+  alt,
+  className = "w-12 h-12 mb-5",
+}: {
+  slug: string;
+  alt: string;
+  className?: string;
+}) {
   const [failed, setFailed] = useState(false);
-  const initial = title.charAt(0).toUpperCase();
-
+  const initial = alt.charAt(0).toUpperCase();
   if (failed) {
     return (
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-heading font-bold text-xl mb-5"
+        className={`rounded-full flex items-center justify-center text-white font-heading font-bold text-xl ${className}`}
         style={{ backgroundColor: "#1F4E79" }}
       >
         {initial}
@@ -23,9 +30,9 @@ function ProductIcon({ slug, title }: { slug: string; title: string }) {
   }
   return (
     <img
-      src={`/images/icons/${slug}.svg`}
-      alt={title}
-      className="w-12 h-12 mb-5 object-contain"
+      src={`/images/icons/${slug}`}
+      alt={alt}
+      className={`object-contain ${className}`}
       onError={() => setFailed(true)}
     />
   );
@@ -86,32 +93,32 @@ function HeroMockPanel() {
 // ── Funding Products ──────────────────────────────────────────────────────────
 const PRODUCTS = [
   {
-    slug: "term-loan",
+    icon: "business-term.svg",
     title: "Business Term Loan",
     copy: "Competitive rates and extended repayment terms designed to support your cash flow.",
   },
   {
-    slug: "line-of-credit",
+    icon: "business-line.svg",
     title: "Business Line of Credit",
     copy: "Flexible access to capital to help manage cash flow and fuel business growth.",
   },
   {
-    slug: "revenue-based",
+    icon: "revenue-based.svg",
     title: "Revenue-Based Financing",
     copy: "Quick, straightforward funding so you can stay focused on running your business.",
   },
   {
-    slug: "equipment",
+    icon: "euipment-financing.svg",
     title: "Equipment Financing",
     copy: "Finance up to 100% of your equipment costs with industry-leading rates and terms.",
   },
   {
-    slug: "sba",
+    icon: "sba-loan.svg",
     title: "SBA Loan",
     copy: "A range of SBA loan options to help your business achieve long-term growth.",
   },
   {
-    slug: "invoice-factoring",
+    icon: "invoice-factory.svg",
     title: "Invoice Factoring",
     copy: "Turn outstanding invoices into immediate cash and eliminate long payment delays.",
   },
@@ -121,21 +128,25 @@ const PRODUCTS = [
 const STEPS = [
   {
     num: "01",
+    icon: "apply-online.svg",
     title: "Apply online",
     copy: "Complete a short application with basic business and financial information.",
   },
   {
     num: "02",
+    icon: "get-matched.svg",
     title: "Get matched",
     copy: "Your profile is reviewed and matched with lenders aligned with your business needs.",
   },
   {
     num: "03",
+    icon: "compare-offers.svg",
     title: "Compare offers",
     copy: "Review available terms, repayment structures, and funding amounts.",
   },
   {
     num: "04",
+    icon: "get-funded.svg",
     title: "Get funded",
     copy: "Select an offer and receive funds to support your business goals.",
   },
@@ -144,18 +155,22 @@ const STEPS = [
 // ── Why Us ────────────────────────────────────────────────────────────────────
 const WHY_US = [
   {
+    icon: "one-application.svg",
     title: "One application",
     copy: "Complete a single application and unlock access to multiple lenders and funding products at once.",
   },
   {
+    icon: "multiple-options.svg",
     title: "Multiple options",
     copy: "We match you with a range of financing solutions tailored to your business profile and goals.",
   },
   {
+    icon: "fast-decisions.svg",
     title: "Fast decisions",
     copy: "Receive matched funding options typically within 24 hours of completing your application.",
   },
   {
+    icon: "dedicated-support.svg",
     title: "Dedicated support",
     copy: "Our team is here to guide you through the process and help you choose the right offer.",
   },
@@ -217,9 +232,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left: copy */}
             <Reveal delay={0}>
-              <h1
-                className="font-heading font-bold text-[36px] md:text-[56px] leading-[1.1] tracking-tight text-foreground mb-5"
-              >
+              <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1.1] tracking-tight text-foreground mb-5">
                 Smart business funding, simplified
               </h1>
               <p className="font-heading font-semibold text-xl md:text-2xl text-primary mb-6">
@@ -296,9 +309,9 @@ export default function Home() {
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCTS.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 80}>
+              <Reveal key={p.icon} delay={i * 80}>
                 <TiltCard className="h-full">
-                  <ProductIcon slug={p.slug} title={p.title} />
+                  <SectionIcon slug={p.icon} alt={p.title} />
                   <h3 className="font-heading font-semibold text-lg text-foreground mb-3">
                     {p.title}
                   </h3>
@@ -342,6 +355,11 @@ export default function Home() {
                   >
                     {step.num}
                   </div>
+                  <SectionIcon
+                    slug={step.icon}
+                    alt={step.title}
+                    className="w-10 h-10 mb-4 object-contain"
+                  />
                   <h3 className="font-heading font-semibold text-base text-foreground mb-3">
                     {step.title}
                   </h3>
@@ -357,7 +375,7 @@ export default function Home() {
           <div className="flex flex-col gap-6 md:hidden">
             {STEPS.map((step, i) => (
               <Reveal key={step.num} delay={i * 80}>
-                <div className="flex gap-5">
+                <div className="flex gap-5 items-start">
                   <div
                     className="flex-none w-12 h-12 rounded-full flex items-center justify-center font-heading font-bold text-base tabular-nums"
                     style={{ backgroundColor: "#1F4E79", color: "#ffffff" }}
@@ -365,6 +383,11 @@ export default function Home() {
                     {step.num}
                   </div>
                   <div>
+                    <SectionIcon
+                      slug={step.icon}
+                      alt={step.title}
+                      className="w-8 h-8 mb-2 object-contain"
+                    />
                     <h3 className="font-heading font-semibold text-base text-foreground mb-1">
                       {step.title}
                     </h3>
@@ -391,7 +414,8 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 gap-6">
             {WHY_US.map((item, i) => (
               <Reveal key={item.title} delay={i * 80}>
-                <TiltCard>
+                <TiltCard className="h-full">
+                  <SectionIcon slug={item.icon} alt={item.title} />
                   <h3 className="font-heading font-semibold text-lg text-foreground mb-3">
                     {item.title}
                   </h3>
@@ -406,7 +430,10 @@ export default function Home() {
       </section>
 
       {/* ── F) CALCULATOR TEASER ───────────────────────────────────────── */}
-      <section style={{ backgroundColor: "#F5F8FB" }} className="py-24 md:py-32 border-y border-border">
+      <section
+        style={{ backgroundColor: "#F5F8FB" }}
+        className="py-24 md:py-32 border-y border-border"
+      >
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             <Reveal delay={0}>
