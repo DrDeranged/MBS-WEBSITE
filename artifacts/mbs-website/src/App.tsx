@@ -22,22 +22,15 @@ import TermsOfService from '@/pages/terms-of-service';
 
 const queryClient = new QueryClient();
 
-const pageVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.15, ease: 'easeOut' } },
-  exit:    { opacity: 0, transition: { duration: 0.1, ease: 'easeIn' } },
-};
-
 function PageTransition({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location}
-        variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.15 } }}
+        exit={{ opacity: 0, transition: { duration: 0.1 } }}
       >
         {children}
       </motion.div>
