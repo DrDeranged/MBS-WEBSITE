@@ -194,3 +194,23 @@
   @keyframes mbsDot   { 0%, 100% { opacity: 0.6; } }
   @keyframes mbsBlink { 0%, 100% { opacity: 1;   } }
 }
+
+/* ── Industry marquee ──────────────────────────────────────────────────────── */
+@keyframes mbs-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.mbs-marquee-track {
+  animation: mbs-marquee 40s linear infinite;
+  will-change: transform;
+}
+
+.mbs-marquee-wrap:hover .mbs-marquee-track,
+.mbs-marquee-wrap:focus-within .mbs-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbs-marquee-track { animation-play-state: paused; }
+}
