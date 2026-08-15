@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "MBS Marketing Website"
+description = "Public marketing website for My Business Solutions (MBS), a business financing brokerage. Replaces the legacy WordPress site. Features the company homepage, calculator, about, contact, blog, and legal pages with a modern fintech design system."
+version = "1.0.0"
+id = "artifacts/mbs-website"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20542
+
+[services.development]
+run = "pnpm --filter @workspace/mbs-website run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mbs-website", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mbs-website/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20542"
+BASE_PATH = "/"

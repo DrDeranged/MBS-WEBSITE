@@ -1,0 +1,52 @@
+Build a marketing website for My Business Solutions (MBS), a business financing
+brokerage, using Next.js App Router and Tailwind CSS. This site replaces a legacy
+WordPress site and is the public front door to the company's platform at
+app.my-business-solutions.com.
+
+DESIGN SYSTEM — "Momentum". Follow exactly, no substitutions:
+- Colors: navy #1F4E79 (primary brand — buttons, links, section anchors),
+  ink #0E2A47 (headlines, footer bg), paper #FFFFFF (page bg),
+  cloud #F5F8FB (alternate section bg), slate #46586C (body text),
+  go #17A567 (accent — CTAs, key numbers, success moments; use with
+  discipline), line #DCE4EC (borders/dividers).
+- Fonts via next/font/google: Sora (headings, 600/700), Inter (body,
+  400/500/600). All numbers and stat figures use tabular-nums.
+- Aesthetic: modern fintech, warm and fast — 8px base radius (12px on
+  cards), soft shadows (shadow-sm/md only, never heavy), pill-shaped
+  primary CTA buttons, generous whitespace, max-w-6xl centered container,
+  88px+ vertical section padding desktop / 56px mobile.
+- Motion: subtle only — fade-up on section entry (Framer Motion), number
+  count-up on stats, smooth hover lift on cards. Respect
+  prefers-reduced-motion.
+
+HARD RULES (apply to every prompt in this project):
+- NEVER invent statistics, testimonials, client names, team members, years
+  in business, or claims of any kind. Use ONLY the copy provided.
+- NEVER refactor, clean up, or redesign anything outside the explicit scope
+  of the current prompt.
+- All external links must be real URLs provided in prompts — never invent
+  URLs, emails, or phone numbers.
+
+BUILD IN THIS PROMPT — the shared shell only:
+1. Root layout with the design system tokens configured in Tailwind.
+2. Header: MBS logo left (image will be added at
+   /public/images/mbs-logo.png — reference it, graceful if missing), nav:
+   Home, Calculator, About, Contact, Blog. Right side: a pill "Apply Now"
+   button in go green linking to https://app.my-business-solutions.com/apply.
+   Sticky, white bg, subtle bottom border on scroll. Mobile: hamburger
+   sheet menu.
+3. Footer on ink #0E2A47: logo area, tagline "Smart business funding,
+   simplified.", Quick Links column (same nav + Apply Now), legal row:
+   "© 2026 My Business Solutions. All rights reserved." with Privacy
+   Policy (/privacy-policy/) and Terms of Service (/terms-of-service/)
+   links. All footer text/links white/light.
+4. A placeholder Home page using the shell (real content comes in Prompt 2):
+   just the hero section with headline "Smart business funding, simplified"
+   subhead "Get matched with the right financing", body line "Apply once
+   and access multiple business funding options tailored to your company's
+   needs. Compare offers, choose confidently, and move forward faster.",
+   primary CTA "Check your options" → https://app.my-business-solutions.com/apply
+   and secondary ghost button "How it works" → /#how-it-works.
+5. Routes stubbed (empty pages using the shell): /calculator, /about,
+   /contact, /blog, /privacy-policy, /terms-of-service.
+Run the dev server and confirm the shell renders. Push to GitHub.
