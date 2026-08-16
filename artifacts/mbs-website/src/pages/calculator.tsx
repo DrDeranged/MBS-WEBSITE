@@ -322,9 +322,10 @@ function ControlBlock({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 const FREQ_OPTIONS: { value: Frequency; label: string }[] = [
-  { value: "Monthly", label: "Monthly" },
-  { value: "Weekly",  label: "Weekly"  },
-  { value: "Daily",   label: "Daily"   },
+  { value: "Monthly",   label: "Monthly"   },
+  { value: "Bi-weekly", label: "Bi-weekly" },
+  { value: "Weekly",    label: "Weekly"    },
+  { value: "Daily",     label: "Daily"     },
 ];
 
 const DEFAULT_BAND_APR = 24;
@@ -402,21 +403,24 @@ export default function Calculator() {
 
   return (
     <Layout>
-      {/* Page header */}
-      <section style={{ backgroundColor: "#F5F8FB" }} className="py-14 md:py-20 border-b border-border">
+      {/* Page header — dark, ink-first shell */}
+      <section
+        className="pt-28 pb-20 md:pt-36 md:pb-28"
+        style={{ background: "linear-gradient(160deg, #0E2A47 0%, #1F4E79 100%)" }}
+      >
         <div className="mx-auto max-w-6xl px-6">
           <p
-            className="font-sans font-semibold text-[12px] uppercase mb-3"
-            style={{ letterSpacing: "0.08em", color: "#17A567" }}
+            className="font-sans font-semibold text-[12px] uppercase mb-4 tracking-widest"
+            style={{ color: "#17A567" }}
           >
             Payment estimator
           </p>
-          <h1 className="font-heading font-bold text-3xl md:text-5xl text-foreground mb-4 leading-tight">
+          <h1 className="font-heading font-bold text-4xl md:text-5xl text-white leading-tight mb-4">
             Estimate your payments
           </h1>
-          <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
-            Adjust the numbers to preview estimated payments — then get your real offer in
-            minutes.
+          <p className="text-lg max-w-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.68)" }}>
+            Adjust the numbers to preview estimated payments — then get your
+            real offer in minutes.
           </p>
         </div>
       </section>
@@ -532,7 +536,7 @@ export default function Calculator() {
                   onChange={(v) => setFrequency(v as Frequency)}
                 />
                 <p className="text-xs text-muted-foreground mt-3">
-                  Daily uses 252 business days/year; Weekly uses 52 weeks/year.
+                  Bi-weekly uses 26 periods/year; Weekly 52; Daily 252 business days.
                 </p>
               </ControlBlock>
             </div>

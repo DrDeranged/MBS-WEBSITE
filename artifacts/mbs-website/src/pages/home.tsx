@@ -1,53 +1,79 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { CountUp } from "@/components/motion/CountUp";
 import { Reveal } from "@/components/motion/Reveal";
-import { SectionHeading } from "@/components/motion/SectionHeading";
-import { TiltCard } from "@/components/motion/TiltCard";
 import { GradientBand } from "@/components/motion/GradientBand";
-import { SectionNumeral } from "@/components/motion/SectionNumeral";
 import { NoiseOverlay } from "@/components/motion/NoiseOverlay";
-import { AmbientVideo } from "@/components/AmbientVideo";
-import { calcPayment } from "@/lib/calcMath";
+import { calcPayment, type Frequency } from "@/lib/calcMath";
 
 const APPLY_URL = "https://app.my-business-solutions.com/apply";
+const INK = "#0E2A47";
+const NAVY = "#1F4E79";
+const GREEN = "#17A567";
+const CLOUD = "#EAF1F8";
 
-// ── Icon with navy-circled-initial fallback ───────────────────────────────────
-function SectionIcon({
-  slug,
-  alt,
-  className = "w-12 h-12 mb-5",
-}: {
-  slug: string;
-  alt: string;
-  className?: string;
-}) {
-  const [failed, setFailed] = useState(false);
-  const initial = alt.charAt(0).toUpperCase();
-  if (failed) {
-    return (
-      <div
-        className={`rounded-full flex items-center justify-center text-white font-heading font-bold text-xl ${className}`}
-        style={{ backgroundColor: "#1F4E79" }}
-      >
-        {initial}
-      </div>
-    );
-  }
+// ── Duotone monogram — two-letter Sora initial in a navy ring w/ green arc ───
+function ProductMonogram({ title }: { title: string }) {
+  const words = title.trim().split(/\s+/);
+  const letters = ((words[0]?.[0] ?? "") + (words[1]?.[0] ?? "")).toUpperCase();
   return (
-    <img
-      src={`/images/icons/${slug}`}
-      alt={alt}
-      className={`object-contain ${className}`}
-      onError={() => setFailed(true)}
-    />
+    <div className="relative w-16 h-16 flex-none shrink-0" aria-hidden="true">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="30" fill="rgba(31,78,121,0.22)" />
+        <circle cx="32" cy="32" r="30.5" stroke="#1F4E79" strokeWidth="1.5" />
+        {/* Go-green quarter-arc: 12 o'clock → 3 o'clock */}
+        <path
+          d="M 32 1.5 A 30.5 30.5 0 0 1 62.5 32"
+          stroke="#17A567"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span
+        className="absolute inset-0 flex items-center justify-center font-heading font-bold"
+        style={{ fontSize: "20px", color: CLOUD }}
+      >
+        {letters}
+      </span>
+    </div>
   );
 }
 
-// ── Live Match Panel ──────────────────────────────────────────────────────────
+// ── SVG diagonal divider — dark→light only (per art direction) ───────────────
+// Container bg = "to" color; polygon fills upper-left triangle with "from" color.
+// Consistent angle: diagonal runs top-right → bottom-left across all instances.
+function DiagonalDivider({
+  fromColor,
+  toColor,
+}: {
+  fromColor: string;
+  toColor: string;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        backgroundColor: toColor,
+        height: "clamp(40px, 4.5vw, 72px)",
+        display: "block",
+        lineHeight: 0,
+      }}
+    >
+      <svg
+        viewBox="0 0 1440 72"
+        preserveAspectRatio="none"
+        style={{ width: "100%", height: "100%", display: "block" }}
+      >
+        {/* Upper-left triangle = fromColor; bottom-right = container toColor */}
+        <polygon points="0,0 1440,0 0,72" fill={fromColor} />
+      </svg>
+    </div>
+  );
+}
+
+// ── Live Match Panel — glass card over hero video ─────────────────────────────
 const CARD_LABELS = ["TERM LOAN", "LINE OF CREDIT", "REVENUE-BASED"] as const;
 const BASE_ROTATIONS = [-1, 0.5, -0.5];
 const BASE_TRANSLATES = [4, 0, -4];
@@ -80,12 +106,15 @@ function HeroMockPanel() {
     if (shouldReduceMotion) return;
 
     const obs = new IntersectionObserver(
-      ([e]) => { isVisible.current = e.isIntersecting; },
+      ([e]) => {
+        isVisible.current = e.isIntersecting;
+      },
       { threshold: 0.1 },
     );
     if (panelRef.current) obs.observe(panelRef.current);
 
-    let t1 = 0, t2 = 0;
+    let t1 = 0,
+      t2 = 0;
 
     const iv = setInterval(() => {
       if (!isVisible.current) return;
@@ -96,10 +125,8 @@ function HeroMockPanel() {
         (amtIdxRef.current[cardIdx] + 1) % AMOUNTS_BY_CARD[cardIdx].length;
       const newAmt = AMOUNTS_BY_CARD[cardIdx][amtIdxRef.current[cardIdx]];
 
-      // Phase 1: fade out the amount text
       setRollingIdx(cardIdx);
 
-      // Phase 2: swap value + clear rolling (digit-roll-in fires via key change)
       t1 = window.setTimeout(() => {
         setAmounts((prev) => {
           const n = [...prev];
@@ -110,7 +137,6 @@ function HeroMockPanel() {
         setPillPopIdx(cardIdx);
       }, 300);
 
-      // Phase 3: clear pill pop
       t2 = window.setTimeout(() => {
         setPillPopIdx(null);
       }, 900);
@@ -127,15 +153,18 @@ function HeroMockPanel() {
   return (
     <div
       ref={panelRef}
-      className="relative flex flex-col justify-center px-8 py-10 min-h-[360px] overflow-hidden"
+      className="relative flex flex-col justify-center px-7 py-9 min-h-[340px] overflow-hidden"
       style={{
-        background: "linear-gradient(145deg, #1F4E79 0%, #0E2A47 100%)",
-        borderRadius: "12px",
+        background: "rgba(255,255,255,0.07)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid rgba(255,255,255,0.12)",
+        borderRadius: "16px",
       }}
     >
-      <NoiseOverlay opacity={0.05} />
+      <NoiseOverlay opacity={0.04} />
 
-      <p className="relative z-10 text-xs font-semibold uppercase tracking-widest text-white/40 mb-6">
+      <p className="relative z-10 text-xs font-semibold uppercase tracking-widest mb-6" style={{ color: "rgba(255,255,255,0.38)" }}>
         Funding options
       </p>
 
@@ -143,17 +172,18 @@ function HeroMockPanel() {
         {CARD_LABELS.map((label, i) => (
           <div
             key={label}
-            className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl px-5 py-4 flex items-center justify-between"
+            className="backdrop-blur-sm rounded-xl px-5 py-4 flex items-center justify-between"
             style={{
+              background: "rgba(255,255,255,0.10)",
+              border: "1px solid rgba(255,255,255,0.13)",
               transform: `rotate(${BASE_ROTATIONS[i]}deg) translateX(${BASE_TRANSLATES[i]}px)`,
               transition: "transform 0.6s cubic-bezier(.34,1.56,.64,1)",
             }}
           >
             <div>
-              <p className="text-[11px] font-mono font-semibold text-white/50 tracking-widest mb-1">
+              <p className="text-[11px] font-mono font-semibold tracking-widest mb-1" style={{ color: "rgba(255,255,255,0.45)" }}>
                 {label}
               </p>
-              {/* key change on amount triggers digit-roll-in animation */}
               <p
                 key={amounts[i]}
                 className={`tabular-nums text-white font-heading font-bold text-2xl${!shouldReduceMotion ? " digit-roll" : ""}`}
@@ -166,14 +196,11 @@ function HeroMockPanel() {
               </p>
             </div>
 
-            {/* Pill springs back to position on each cycle */}
             <motion.span
-              animate={{
-                scale: pillPopIdx === i ? [1, 1.18, 1] : 1,
-              }}
+              animate={{ scale: pillPopIdx === i ? [1, 1.18, 1] : 1 }}
               transition={{ duration: 0.45, times: [0, 0.4, 1] }}
               className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-white"
-              style={{ backgroundColor: "#17A567" }}
+              style={{ backgroundColor: GREEN }}
             >
               Matched
             </motion.span>
@@ -181,84 +208,68 @@ function HeroMockPanel() {
         ))}
       </div>
 
-      <p className="relative z-10 text-[11px] text-white/30 mt-6 text-right">
+      <p className="relative z-10 text-[11px] mt-6 text-right" style={{ color: "rgba(255,255,255,0.25)" }}>
         Illustrative example
       </p>
     </div>
   );
 }
 
-// ── Funding Products ──────────────────────────────────────────────────────────
+// ── Funding Products data (icons removed — monograms replace them) ────────────
 const PRODUCTS = [
   {
-    icon: "business-term.svg",
     title: "Business Term Loan",
     copy: "Competitive rates and extended repayment terms designed to support your cash flow.",
   },
   {
-    icon: "business-line.svg",
     title: "Business Line of Credit",
     copy: "Flexible access to capital to help manage cash flow and fuel business growth.",
   },
   {
-    icon: "revenue-based.svg",
     title: "Revenue-Based Financing",
     copy: "Quick, straightforward funding so you can stay focused on running your business.",
   },
   {
-    icon: "euipment-financing.svg",
     title: "Equipment Financing",
     copy: "Finance up to 100% of your equipment costs with industry-leading rates and terms.",
   },
   {
-    icon: "sba-loan.svg",
     title: "SBA Loan",
     copy: "A range of SBA loan options to help your business achieve long-term growth.",
   },
   {
-    icon: "invoice-factory.svg",
     title: "Invoice Factoring",
     copy: "Turn outstanding invoices into immediate cash and eliminate long payment delays.",
   },
 ];
 
-// ── Industry Marquee ──────────────────────────────────────────────────────────
+// ── Industry Marquee — ink theme ──────────────────────────────────────────────
 const INDUSTRIES = [
-  "Restaurants",
-  "Contractors",
-  "Retail",
-  "Trucking",
-  "Medical",
-  "Salons",
-  "Auto Repair",
-  "E-commerce",
-  "Manufacturing",
-  "Hospitality",
+  "Restaurants","Contractors","Retail","Trucking","Medical",
+  "Salons","Auto Repair","E-commerce","Manufacturing","Hospitality",
 ];
 
 function IndustryMarquee() {
   return (
     <div
-      className="mbs-marquee-wrap overflow-hidden py-4 border-y border-border"
-      style={{ backgroundColor: "#F5F8FB" }}
+      className="mbs-marquee-wrap overflow-hidden py-5"
+      style={{
+        backgroundColor: NAVY,
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}
       aria-hidden="true"
     >
       <div className="mbs-marquee-track flex whitespace-nowrap">
-        {/* Duplicated track for seamless infinite loop */}
         {[...INDUSTRIES, ...INDUSTRIES].map((name, i) => (
           <span key={i} className="inline-flex items-center gap-5 px-5">
             <span
               className="font-sans font-medium text-xs uppercase tracking-[0.1em]"
-              style={{ color: "#46586C" }}
+              style={{ color: "rgba(255,255,255,0.22)" }}
             >
               {name}
             </span>
-            <span
-              className="text-base leading-none"
-              style={{ color: "#17A567" }}
-            >
-              ·
-            </span>
+            <span style={{ color: GREEN, opacity: 0.45 }}>·</span>
           </span>
         ))}
       </div>
@@ -266,67 +277,181 @@ function IndustryMarquee() {
   );
 }
 
-// ── How It Works ──────────────────────────────────────────────────────────────
+// ── How It Works — ONE pinned section ────────────────────────────────────────
 const STEPS = [
   {
     num: "01",
-    icon: "apply-online.svg",
     title: "Apply online",
     copy: "Complete a short application with basic business and financial information.",
   },
   {
     num: "02",
-    icon: "get-matched.svg",
     title: "Get matched",
     copy: "Your profile is reviewed and matched with lenders aligned with your business needs.",
   },
   {
     num: "03",
-    icon: "compare-offers.svg",
     title: "Compare offers",
     copy: "Review available terms, repayment structures, and funding amounts.",
   },
   {
     num: "04",
-    icon: "get-funded.svg",
     title: "Get funded",
     copy: "Select an offer and receive funds to support your business goals.",
   },
 ];
 
-// ── Why Us ────────────────────────────────────────────────────────────────────
+function HowItWorksSection() {
+  const [activeStep, setActiveStep] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    STEPS.forEach((_, i) => {
+      const el = stepRefs.current[i];
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveStep(i);
+        },
+        { threshold: 0.45, rootMargin: "-18% 0px -18% 0px" },
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const step = STEPS[activeStep];
+
+  return (
+    <section id="how-it-works" style={{ backgroundColor: INK }}>
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="md:grid md:grid-cols-[260px_1fr]">
+          {/* LEFT — sticky label + changing numeral */}
+          <div className="hidden md:block">
+            <div
+              className="sticky flex flex-col py-24"
+              style={{ top: "80px" }}
+            >
+              <p
+                className="text-[11px] font-semibold uppercase tracking-widest mb-8"
+                style={{ color: "rgba(255,255,255,0.28)" }}
+              >
+                How it works
+              </p>
+              {/* Giant editorial numeral — changes with active step */}
+              <div
+                className="font-heading font-bold tabular-nums transition-all duration-500"
+                style={{
+                  fontSize: "clamp(96px, 11vw, 152px)",
+                  lineHeight: 0.88,
+                  color: "rgba(23,165,103,0.14)",
+                }}
+              >
+                {step.num}
+              </div>
+              <div className="mt-8 w-10 h-px" style={{ backgroundColor: GREEN }} />
+              <p
+                className="font-heading font-semibold text-sm mt-5 max-w-[200px] transition-all duration-400"
+                style={{ color: CLOUD }}
+              >
+                {step.title}
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT — scrolling steps */}
+          <div
+            className="md:border-l"
+            style={{ borderColor: "rgba(255,255,255,0.06)" }}
+          >
+            {STEPS.map((s, i) => {
+              const isActive = shouldReduceMotion || activeStep === i;
+              return (
+                <div
+                  key={s.num}
+                  ref={(el) => {
+                    stepRefs.current[i] = el;
+                  }}
+                  className="flex flex-col justify-center py-20 md:pl-14 transition-opacity duration-500"
+                  style={{ minHeight: "78vh", opacity: isActive ? 1 : 0.18 }}
+                >
+                  {/* Mobile: numeral label */}
+                  <p
+                    className="md:hidden text-[11px] font-semibold uppercase tracking-widest mb-4"
+                    style={{ color: "rgba(255,255,255,0.28)" }}
+                  >
+                    Step {s.num}
+                  </p>
+                  <div
+                    className="md:hidden font-heading font-bold tabular-nums mb-6"
+                    style={{
+                      fontSize: "80px",
+                      lineHeight: 0.88,
+                      color: "rgba(23,165,103,0.14)",
+                    }}
+                  >
+                    {s.num}
+                  </div>
+
+                  <h3
+                    className="font-heading font-bold mb-5 leading-tight transition-colors duration-500"
+                    style={{
+                      fontSize: "clamp(28px, 4vw, 48px)",
+                      color: isActive ? CLOUD : "rgba(234,241,248,0.28)",
+                    }}
+                  >
+                    {s.title}
+                  </h3>
+                  <p
+                    className="text-lg leading-relaxed max-w-lg"
+                    style={{ color: "rgba(234,241,248,0.52)" }}
+                  >
+                    {s.copy}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Why Us data (icons removed — green square markers replace them) ───────────
 const WHY_US = [
   {
-    icon: "one-application.svg",
     title: "One application",
     copy: "Complete a single application and unlock access to multiple lenders and funding products at once.",
   },
   {
-    icon: "multiple-options.svg",
     title: "Multiple options",
     copy: "We match you with a range of financing solutions tailored to your business profile and goals.",
   },
   {
-    icon: "fast-decisions.svg",
     title: "Fast decisions",
     copy: "Receive matched funding options typically within 24 hours of completing your application.",
   },
   {
-    icon: "dedicated-support.svg",
     title: "Dedicated support",
     copy: "Our team is here to guide you through the process and help you choose the right offer.",
   },
 ];
 
-// ── Working Mini-Calculator ───────────────────────────────────────────────────
+// ── Working Mini-Calculator (light contrast moment) ───────────────────────────
 const MINI_MIN = 10_000;
 const MINI_MAX = 500_000;
 const MINI_STEP = 5_000;
+const MINI_FREQ_OPTIONS: Frequency[] = ["Monthly", "Bi-weekly", "Weekly"];
 
 function MiniCalc() {
   const [amount, setAmount] = useState(100_000);
+  const [frequency, setFrequency] = useState<Frequency>("Monthly");
   const pct = ((amount - MINI_MIN) / (MINI_MAX - MINI_MIN)) * 100;
-  const { payment } = calcPayment(amount, 12, 24, "Monthly");
+  const { payment } = calcPayment(amount, 12, 24, frequency);
 
   return (
     <div
@@ -336,9 +461,31 @@ function MiniCalc() {
       <p className="font-heading font-semibold text-foreground mb-1">
         Payment estimator
       </p>
-      <p className="text-xs text-muted-foreground mb-6">
-        12-month term · 24% APR · Monthly payments
+      <p className="text-xs text-muted-foreground mb-4">
+        12-month term · 24% APR
       </p>
+
+      {/* Frequency toggle */}
+      <div
+        className="flex gap-1 p-1 rounded-lg mb-6"
+        style={{ backgroundColor: "#F5F8FB" }}
+        role="group"
+        aria-label="Payment frequency"
+      >
+        {MINI_FREQ_OPTIONS.map((f) => (
+          <button
+            key={f}
+            onClick={() => setFrequency(f)}
+            className={`flex-1 text-xs py-1.5 rounded-md font-medium transition-all duration-150 ${
+              frequency === f
+                ? "bg-white shadow-sm text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
 
       {/* Amount slider */}
       <div className="mb-1">
@@ -366,14 +513,13 @@ function MiniCalc() {
       </div>
 
       {/* Live result */}
-      <div
-        className="rounded-xl px-5 py-4"
-        style={{ backgroundColor: "#F5F8FB" }}
-      >
-        <p className="text-sm text-muted-foreground mb-1">Est. monthly payment</p>
+      <div className="rounded-xl px-5 py-4" style={{ backgroundColor: "#F5F8FB" }}>
+        <p className="text-sm text-muted-foreground mb-1">
+          Est. {frequency.toLowerCase()} payment
+        </p>
         <p
           className="tabular-nums font-heading font-bold text-3xl transition-all duration-150"
-          style={{ color: "#1F4E79" }}
+          style={{ color: NAVY }}
         >
           ${payment.toLocaleString()}
         </p>
@@ -388,23 +534,11 @@ function MiniCalc() {
         <a
           href="/calculator"
           className="text-sm font-semibold inline-flex items-center gap-1 transition-colors hover:underline"
-          style={{ color: "#1F4E79" }}
+          style={{ color: NAVY }}
         >
           Fine-tune in the full calculator
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M5 12h14M12 5l7 7-7 7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </a>
         <a
@@ -412,7 +546,7 @@ function MiniCalc() {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center rounded-full text-white px-6 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-          style={{ backgroundColor: "#17A567" }}
+          style={{ backgroundColor: GREEN }}
         >
           Apply now — it's free
         </a>
@@ -428,32 +562,78 @@ export default function Home() {
     "Apply once and access multiple business funding options tailored to your company's needs. Compare offers, choose confidently, and move forward faster.",
   );
 
+  // Hero video playback (replicates AmbientVideo logic; don't modify AmbientVideo.tsx)
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+    video.muted = true;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) {
+      video.pause();
+    } else {
+      video.play().catch(() => {
+        video.addEventListener("canplay", () => video.play().catch(() => {}), {
+          once: true,
+        });
+      });
+    }
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) video.pause();
+      else video.play().catch(() => {});
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
-    <Layout>
-      {/* ── A) HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden min-h-[calc(100vh-80px)] flex items-center bg-background pt-[64px] pb-16 md:pb-24">
-        {/* Radial mesh gradient behind copy side */}
+    <Layout mainClassName="flex-1">
+      {/* ── A) CINEMATIC HERO ──────────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden flex flex-col justify-center"
+        style={{ minHeight: "100dvh", paddingTop: "96px", paddingBottom: "72px" }}
+      >
+        {/* Full-bleed video background */}
+        <video
+          ref={heroVideoRef}
+          className="absolute inset-0 w-full h-full object-cover"
+          poster="/videos/hero-band-poster.jpg"
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-band.webm" type="video/webm" />
+          <source src="/videos/hero-band.mp4" type="video/mp4" />
+        </video>
+
+        {/* Ink gradient overlay — 85 % left (copy) → 40 % right (glass panel) */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 55% 70% at 0% 50%, rgba(23,165,103,0.055) 0%, transparent 65%), " +
-              "radial-gradient(ellipse 45% 55% at 10% 20%, rgba(31,78,121,0.07) 0%, transparent 55%)",
+              "linear-gradient(to right, rgba(14,42,71,0.88) 0%, rgba(14,42,71,0.42) 100%)",
           }}
         />
 
         <div className="relative z-10 mx-auto max-w-6xl px-6 w-full">
           <div className="grid md:grid-cols-2 xl:grid-cols-[44%_56%] gap-12 lg:gap-16 items-center">
+            {/* ── Left: copy ─────────────────────────────────────────────── */}
             <Reveal delay={0}>
               <h1
-                className="font-heading font-bold tracking-tight text-foreground mb-5"
-                style={{ fontSize: "clamp(40px, 5.5vw, 72px)", lineHeight: 1.05 }}
+                className="font-heading font-bold tracking-tight mb-5"
+                style={{
+                  fontSize: "clamp(44px, 6vw, 88px)",
+                  lineHeight: 1.02,
+                  color: CLOUD,
+                }}
               >
                 Smart business funding,{" "}
-                <span className="relative inline-block whitespace-nowrap">
+                <span className="relative inline-block whitespace-nowrap" style={{ color: GREEN }}>
                   simplified
-                  {/* Animated go-green underline — CSS-driven, static under prefers-reduced-motion */}
+                  {/* Animated drawn underline */}
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -473,32 +653,43 @@ export default function Home() {
                   </svg>
                 </span>
               </h1>
-              <p className="font-heading font-semibold text-xl md:text-2xl text-primary mb-6">
+
+              <p
+                className="font-heading font-semibold text-xl md:text-2xl mb-6"
+                style={{ color: "rgba(234,241,248,0.75)" }}
+              >
                 Get matched with the right financing
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-lg">
-                Apply once and access multiple business funding options tailored to
-                your company's needs. Compare offers, choose confidently, and move
-                forward faster.
+              <p
+                className="text-lg leading-relaxed mb-10 max-w-lg"
+                style={{ color: "rgba(234,241,248,0.60)" }}
+              >
+                Apply once and access multiple business funding options tailored
+                to your company's needs. Compare offers, choose confidently, and
+                move forward faster.
               </p>
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
                   href={APPLY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-                  style={{ backgroundColor: "#17A567" }}
+                  className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.45)]"
+                  style={{ backgroundColor: GREEN }}
                 >
                   Check your options
                 </a>
                 <a
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center rounded-full border-2 border-border text-foreground px-8 py-4 text-base font-semibold transition-all duration-200 hover:border-primary hover:text-primary"
+                  className="inline-flex items-center justify-center rounded-full border px-8 py-4 text-base font-semibold transition-all duration-200 hover:bg-white/10"
+                  style={{ borderColor: "rgba(255,255,255,0.30)", color: CLOUD }}
                 >
                   How it works
                 </a>
               </div>
             </Reveal>
+
+            {/* ── Right: glass match panel ───────────────────────────────── */}
             <Reveal delay={150} className="xl:-mr-10">
               <HeroMockPanel />
             </Reveal>
@@ -506,31 +697,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── A½) AMBIENT VIDEO BAND ─────────────────────────────────────── */}
-      <AmbientVideo
-        heading="Funding that moves as fast as your business"
-        body="One application. Multiple lenders. Real offers in 24 hours."
-      />
-
-      {/* ── B) TRUST STRIP ─────────────────────────────────────────────── */}
-      <section style={{ backgroundColor: "#F5F8FB" }} className="py-10 border-y border-border">
+      {/* ── B) TRUST STRIP (dark) ──────────────────────────────────────────── */}
+      <section
+        className="py-12"
+        style={{
+          backgroundColor: NAVY,
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:divide-x divide-border">
+          <div className="grid grid-cols-3 gap-6 sm:gap-8 divide-x divide-white/10">
             {[
               { value: "6", label: "funding products" },
               { value: "1", label: "application" },
               { value: "24hr", label: "typical response" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center sm:px-8 first:pl-0 last:pr-0">
-                <p
-                  className="font-heading font-bold text-4xl mb-1 tabular-nums"
-                  style={{ color: "#1F4E79" }}
-                >
+              <div key={stat.label} className="text-center px-4 sm:px-8">
+                <p className="font-heading font-bold text-3xl md:text-4xl tabular-nums text-white mb-1">
                   <CountUp value={stat.value} />
                 </p>
                 <p
-                  className="text-sm font-medium uppercase tracking-wider"
-                  style={{ letterSpacing: "0.06em", color: "#46586C" }}
+                  className="text-[11px] font-semibold uppercase tracking-widest"
+                  style={{ color: "rgba(255,255,255,0.42)" }}
                 >
                   {stat.label}
                 </p>
@@ -540,134 +728,126 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── C) FUNDING PRODUCTS ────────────────────────────────────────── */}
-      <section id="products" className="py-24 md:py-32 bg-background">
+      {/* ── C) FUNDING PRODUCTS — editorial 2-column list ─────────────────── */}
+      <section id="products" className="py-20 md:py-28" style={{ backgroundColor: INK }}>
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <SectionHeading
-              eyebrow="Funding solutions"
-              heading="Flexible financing for every stage of your business"
-            />
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-3"
+              style={{ color: GREEN }}
+            >
+              Funding solutions
+            </p>
+            <h2
+              className="font-heading font-bold text-3xl md:text-4xl mb-14 leading-tight"
+              style={{ color: CLOUD }}
+            >
+              Flexible financing for every stage
+            </h2>
           </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PRODUCTS.map((p, i) => (
-              <Reveal key={p.icon} delay={i * 80}>
-                <TiltCard className="h-full">
-                  <SectionIcon slug={p.icon} alt={p.title} />
-                  <h3 className="font-heading font-semibold text-lg text-foreground mb-3">
-                    {p.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {p.copy}
-                  </p>
-                </TiltCard>
-              </Reveal>
+
+          {/* 2-column offset list: left column gets items 0,2,4; right gets 1,3,5 */}
+          <div className="grid md:grid-cols-2 gap-x-16">
+            {[0, 1].map((col) => (
+              <div key={col}>
+                {PRODUCTS.filter((_, i) => i % 2 === col).map((p, rowIdx) => (
+                  <Reveal key={p.title} delay={rowIdx * 80 + col * 40}>
+                    <div
+                      className="group relative flex items-center gap-6 py-7 overflow-hidden cursor-pointer"
+                      style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+                    >
+                      {/* Hover green wipe — slides in from left */}
+                      <div
+                        className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out pointer-events-none"
+                        style={{ backgroundColor: "rgba(23,165,103,0.07)" }}
+                      />
+                      <ProductMonogram title={p.title} />
+                      <div className="relative z-10 flex-1 min-w-0">
+                        <h3
+                          className="font-heading font-semibold text-base mb-1.5 transition-colors duration-300 group-hover:text-[#17A567]"
+                          style={{ color: CLOUD }}
+                        >
+                          {p.title}
+                        </h3>
+                        <p
+                          className="text-sm leading-relaxed"
+                          style={{ color: "rgba(234,241,248,0.48)" }}
+                        >
+                          {p.copy}
+                        </p>
+                      </div>
+                      {/* Arrow appears on hover */}
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="relative z-10 flex-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ color: GREEN }}
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             ))}
           </div>
+
+          <Reveal delay={240}>
+            <div className="mt-14 text-center">
+              <a
+                href={APPLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.40)]"
+                style={{ backgroundColor: GREEN }}
+              >
+                See your funding options
+              </a>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── C½) INDUSTRY MARQUEE ───────────────────────────────────────── */}
+      {/* ── C½) INDUSTRY MARQUEE — ink theme ──────────────────────────────── */}
       <IndustryMarquee />
 
-      {/* ── D) HOW IT WORKS ────────────────────────────────────────────── */}
-      <section
-        id="how-it-works"
-        style={{ backgroundColor: "#F5F8FB" }}
-        className="py-24 md:py-32"
-      >
+      {/* ── D) HOW IT WORKS — pinned scroll (one pinned section, per spec) ── */}
+      <HowItWorksSection />
+
+      {/* ── E) BENTO WHY-US — ink theme, green square markers ─────────────── */}
+      <section className="py-24 md:py-32" style={{ backgroundColor: INK }}>
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <SectionHeading eyebrow="Funding made simple" heading="How it works" />
+            <p
+              className="text-xs font-semibold uppercase tracking-widest mb-3"
+              style={{ color: GREEN }}
+            >
+              Why choose us
+            </p>
+            <h2
+              className="font-heading font-bold text-3xl md:text-4xl mb-14 leading-tight"
+              style={{ color: CLOUD }}
+            >
+              Why businesses choose us
+            </h2>
           </Reveal>
 
-          {/* Desktop: horizontal timeline with editorial numerals */}
-          <div className="hidden md:grid md:grid-cols-4 gap-0 relative">
-            <div
-              className="absolute top-[28px] left-[12.5%] right-[12.5%] h-px"
-              style={{ backgroundColor: "#DCE4EC" }}
-            />
-            {STEPS.map((step, i) => (
-              <Reveal key={step.num} delay={i * 100}>
-                <div className="relative overflow-hidden flex flex-col items-center text-center px-4 py-2">
-                  <SectionNumeral num={step.num} />
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div
-                      className="w-14 h-14 rounded-full flex items-center justify-center font-heading font-bold text-lg mb-6 bg-white border-2 tabular-nums"
-                      style={{ borderColor: "#17A567", color: "#17A567" }}
-                    >
-                      {step.num}
-                    </div>
-                    <SectionIcon
-                      slug={step.icon}
-                      alt={step.title}
-                      className="w-10 h-10 mb-4 object-contain"
-                    />
-                    <h3 className="font-heading font-semibold text-base text-foreground mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {step.copy}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          {/* Mobile: vertical list */}
-          <div className="flex flex-col gap-6 md:hidden">
-            {STEPS.map((step, i) => (
-              <Reveal key={step.num} delay={i * 80}>
-                <div className="flex gap-5 items-start">
-                  <div
-                    className="flex-none w-12 h-12 rounded-full flex items-center justify-center font-heading font-bold text-base tabular-nums"
-                    style={{ backgroundColor: "#1F4E79", color: "#ffffff" }}
-                  >
-                    {step.num}
-                  </div>
-                  <div>
-                    <SectionIcon
-                      slug={step.icon}
-                      alt={step.title}
-                      className="w-8 h-8 mb-2 object-contain"
-                    />
-                    <h3 className="font-heading font-semibold text-base text-foreground mb-1">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {step.copy}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── E) BENTO WHY-US ────────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="mx-auto max-w-6xl px-6">
-          <Reveal>
-            <SectionHeading eyebrow="Why choose us" heading="Why businesses choose us" />
-          </Reveal>
-
-          <div className="grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-4">
-            {/* ── Navy stats cell (spans 2 rows on desktop, full-width on mobile) */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-3">
+            {/* Stats cell — spans 2 rows on desktop */}
             <Reveal delay={0}>
               <div
-                className="col-span-2 lg:col-span-1 lg:row-span-2 rounded-[12px] p-8 flex flex-col justify-center h-full"
-                style={{ backgroundColor: "#1F4E79" }}
+                className="col-span-2 lg:col-span-1 lg:row-span-2 rounded-2xl p-8 flex flex-col justify-center h-full"
+                style={{ backgroundColor: NAVY }}
               >
                 <p
                   className="text-[11px] font-semibold uppercase tracking-widest mb-8"
-                  style={{ color: "rgba(255,255,255,0.4)" }}
+                  style={{ color: "rgba(255,255,255,0.33)" }}
                 >
                   By the numbers
                 </p>
-
-                {/* Mobile: 3-across; desktop: vertical stack */}
                 <div className="grid grid-cols-3 lg:grid-cols-1 gap-6 lg:gap-8">
                   {[
                     { value: "6", label: "funding products" },
@@ -680,7 +860,7 @@ export default function Home() {
                       </p>
                       <p
                         className="text-[11px] font-medium uppercase tracking-wider"
-                        style={{ color: "rgba(255,255,255,0.5)" }}
+                        style={{ color: "rgba(255,255,255,0.42)" }}
                       >
                         {stat.label}
                       </p>
@@ -690,18 +870,36 @@ export default function Home() {
               </div>
             </Reveal>
 
-            {/* ── 4 why-us cells (cloud bg) */}
+            {/* 4 why-us cells — go-green square marker */}
             {WHY_US.map((item, i) => (
               <Reveal key={item.title} delay={80 + i * 60}>
                 <div
-                  className="rounded-[12px] p-6 h-full"
-                  style={{ backgroundColor: "#F5F8FB", border: "1px solid #DCE4EC" }}
+                  className="rounded-2xl p-6 h-full"
+                  style={{
+                    backgroundColor: "rgba(31,78,121,0.20)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                  }}
                 >
-                  <SectionIcon slug={item.icon} alt={item.title} className="w-10 h-10 mb-4" />
-                  <h3 className="font-heading font-semibold text-base text-foreground mb-2">
+                  {/* Go-green square marker */}
+                  <div
+                    className="mb-5"
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      backgroundColor: GREEN,
+                      borderRadius: "2px",
+                    }}
+                  />
+                  <h3
+                    className="font-heading font-semibold text-base mb-2"
+                    style={{ color: CLOUD }}
+                  >
                     {item.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "rgba(234,241,248,0.50)" }}
+                  >
                     {item.copy}
                   </p>
                 </div>
@@ -711,17 +909,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── F) WORKING MINI-CALCULATOR ─────────────────────────────────── */}
-      <section
-        style={{ backgroundColor: "#F5F8FB" }}
-        className="py-24 md:py-32 border-y border-border"
-      >
+      {/* ── Diagonal divider: dark → light (the only dark→light seam) ─────── */}
+      <DiagonalDivider fromColor={INK} toColor="#ffffff" />
+
+      {/* ── F) MINI-CALC — light paper section (deliberate contrast moment) ─ */}
+      <section className="py-20 md:py-28" style={{ backgroundColor: "#ffffff" }}>
         <div className="mx-auto max-w-6xl px-6">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
             <Reveal delay={0}>
               <p
                 className="font-sans font-semibold text-[12px] uppercase mb-3"
-                style={{ letterSpacing: "0.08em", color: "#17A567" }}
+                style={{ letterSpacing: "0.08em", color: GREEN }}
               >
                 Payment calculator
               </p>
@@ -729,15 +927,26 @@ export default function Home() {
                 Estimate your payments
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8 max-w-md">
-                Adjust the funding amount and see your estimated monthly payment
+                Adjust the funding amount and see your estimated payment
                 instantly. Fine-tune further in the full calculator.
               </p>
-              <a
-                href="/calculator"
-                className="inline-flex items-center justify-center rounded-full border-2 border-primary text-primary px-8 py-4 text-base font-semibold transition-all duration-200 hover:bg-primary hover:text-white"
-              >
-                Open the full calculator
-              </a>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href={APPLY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.40)]"
+                  style={{ backgroundColor: GREEN }}
+                >
+                  Apply now — it's free
+                </a>
+                <a
+                  href="/calculator"
+                  className="inline-flex items-center justify-center rounded-full border-2 border-primary text-primary px-8 py-4 text-base font-semibold transition-all duration-200 hover:bg-primary hover:text-white"
+                >
+                  Full calculator
+                </a>
+              </div>
             </Reveal>
             <Reveal delay={150}>
               <MiniCalc />
@@ -746,7 +955,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── G) GRADIENT BAND ───────────────────────────────────────────── */}
+      {/* ── G) GRADIENT BAND CTA — flat edge (light→dark, no diagonal per spec) */}
       <GradientBand
         heading="Ready to see your options?"
         ctaLabel="Apply now — it takes minutes"
