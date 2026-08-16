@@ -190,17 +190,40 @@ export function MbsAssist() {
         {!open && (
           <motion.button
             key="pill"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.96 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { delay: 0.4, type: "spring", stiffness: 380, damping: 26 }
+            }
+            whileHover={prefersReducedMotion ? {} : { y: -3 }}
+            whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
             onClick={() => setOpen(true)}
             aria-label="Open MbsAssist chat"
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full px-5 py-3 shadow-lg font-semibold text-sm text-white select-none"
-            style={{ backgroundColor: "#17A567" }}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3 font-semibold text-sm text-white select-none focus-visible:outline-none"
+            style={{
+              background: "rgba(14,42,71,0.82)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              boxShadow: "0 8px 24px rgba(14,42,71,0.30), inset 0 1px 0 rgba(255,255,255,0.10)",
+            }}
           >
+            {/* Green pulse dot */}
+            <span className="relative flex h-2 w-2 flex-shrink-0" aria-hidden="true">
+              <span
+                className="mbs-dot-pulse absolute inline-flex h-full w-full rounded-full"
+                style={{ backgroundColor: "#17A567", opacity: 0.7 }}
+              />
+              <span
+                className="relative inline-flex rounded-full h-2 w-2"
+                style={{ backgroundColor: "#17A567" }}
+              />
+            </span>
             {/* Chat bubble icon */}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
                 d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
                 stroke="white"

@@ -233,3 +233,191 @@
     animation: none;
   }
 }
+
+/* ── Primary button system ─────────────────────────────────────────────────── */
+@keyframes btn-sheen {
+  from { left: -60%; }
+  to   { left: 120%; }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border-radius: 9999px;
+  padding: 0 2rem;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #fff;
+  background: linear-gradient(180deg, #1DB674 0%, #149258 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    0 1px 3px rgba(0,0,0,0.12);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  white-space: nowrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Diagonal sheen streak, off-screen by default */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 38%;
+  height: 140%;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 70%
+  );
+  transform: skewX(-15deg);
+  pointer-events: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    0 8px 24px rgba(23,165,103,0.35);
+}
+
+.btn-primary:hover::before {
+  animation: btn-sheen 0.6s ease forwards;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 2px 8px rgba(23,165,103,0.12);
+  transition-duration: 0.06s;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid #17A567;
+  outline-offset: 2px;
+}
+
+/* Arrow nudge: wrap → in <span class="btn-arrow"> */
+.btn-primary .btn-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.btn-primary:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary { transition: none !important; }
+  .btn-primary::before { display: none; }
+  .btn-primary:hover  { transform: none; }
+  .btn-primary:active { transform: none; }
+  .btn-primary .btn-arrow { transition: none !important; }
+  .btn-primary:hover .btn-arrow { transform: none; }
+}
+
+/* ── Ghost / secondary button ──────────────────────────────────────────────── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border-radius: 9999px;
+  padding: 0 2rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: rgba(234,241,248,0.85);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.28);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: #17A567;
+  border-color: #17A567;
+  background: rgba(23,165,103,0.07);
+}
+
+.btn-ghost:active { opacity: 0.82; }
+
+.btn-ghost:focus-visible {
+  outline: 2px solid #17A567;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-ghost { transition: none !important; }
+}
+
+/* ── Global focus ring for all interactive elements ────────────────────────── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid #17A567;
+  outline-offset: 2px;
+}
+
+/* ── Card system ───────────────────────────────────────────────────────────── */
+/* Light-section cards */
+.mbs-card {
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 2px 8px rgba(14,42,71,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.mbs-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 8px 24px rgba(14,42,71,0.13);
+}
+
+/* Dark-section cards (ink/navy bg) */
+.mbs-card-dark {
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 2px 8px rgba(0,0,0,0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.mbs-card-dark:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 8px 24px rgba(0,0,0,0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbs-card,
+  .mbs-card-dark { transition: none; }
+  .mbs-card:hover,
+  .mbs-card-dark:hover { transform: none; }
+}
+
+/* ── MbsAssist floater — green pulse dot ───────────────────────────────────── */
+@keyframes mbs-floater-dot {
+  0%, 100% { transform: scale(1);   opacity: 1;   }
+  50%       { transform: scale(1.6); opacity: 0.5; }
+}
+
+.mbs-dot-pulse {
+  animation: mbs-floater-dot 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbs-dot-pulse { animation: none; }
+}

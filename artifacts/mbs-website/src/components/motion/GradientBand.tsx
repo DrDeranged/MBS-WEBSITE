@@ -26,7 +26,7 @@ export function GradientBand({ heading, ctaLabel, ctaHref }: GradientBandProps) 
           href={ctaHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-full bg-accent text-white px-8 py-4 text-lg font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/20"
+          className="btn-primary text-lg px-8"
         >
           {ctaLabel}
         </a>

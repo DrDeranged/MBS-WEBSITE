@@ -197,11 +197,20 @@ function HeroMockPanel() {
             </div>
 
             <motion.span
-              animate={{ scale: pillPopIdx === i ? [1, 1.18, 1] : 1 }}
-              transition={{ duration: 0.45, times: [0, 0.4, 1] }}
-              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-white"
-              style={{ backgroundColor: GREEN }}
+              animate={{
+                scale: pillPopIdx === i ? [1, 1.22, 0.95, 1] : 1,
+                boxShadow: pillPopIdx === i
+                  ? ["0 0 0px rgba(23,165,103,0)", "0 0 14px rgba(23,165,103,0.55)", "0 0 6px rgba(23,165,103,0.25)"]
+                  : "0 0 0px rgba(23,165,103,0)",
+              }}
+              transition={{ duration: 0.5, times: [0, 0.35, 0.7, 1] }}
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-white"
+              style={{ background: "linear-gradient(135deg, #1DB674 0%, #149258 100%)" }}
             >
+              {/* tiny check */}
+              <svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true">
+                <path d="M1 4.5l2.3 2.3 4.7-4.3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               Matched
             </motion.span>
           </div>
@@ -545,8 +554,7 @@ function MiniCalc() {
           href={APPLY_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-full text-white px-6 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-          style={{ backgroundColor: GREEN }}
+          className="btn-primary text-sm"
         >
           Apply now — it's free
         </a>
@@ -674,15 +682,13 @@ export default function Home() {
                   href={APPLY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.45)]"
-                  style={{ backgroundColor: GREEN }}
+                  className="btn-primary text-base px-8"
                 >
                   Check your options
                 </a>
                 <a
                   href="#how-it-works"
-                  className="inline-flex items-center justify-center rounded-full border px-8 py-4 text-base font-semibold transition-all duration-200 hover:bg-white/10"
-                  style={{ borderColor: "rgba(255,255,255,0.30)", color: CLOUD }}
+                  className="btn-ghost text-base px-8"
                 >
                   How it works
                 </a>

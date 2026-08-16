@@ -84,8 +84,7 @@ export function Header() {
               href="https://app.my-business-solutions.com/apply"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full text-white px-6 py-2.5 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(23,165,103,0.4)]"
-              style={{ backgroundColor: "#17A567" }}
+              className="btn-primary text-sm px-6"
             >
               Apply Now
             </a>
@@ -163,8 +162,7 @@ export function Header() {
             href="https://app.my-business-solutions.com/apply"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex w-full items-center justify-center rounded-full text-white px-6 py-3.5 text-base font-semibold"
-            style={{ backgroundColor: "#17A567" }}
+            className="btn-primary w-full text-base px-6"
           >
             Apply Now
           </a>

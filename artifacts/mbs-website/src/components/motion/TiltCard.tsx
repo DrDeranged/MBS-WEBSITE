@@ -9,14 +9,7 @@ interface TiltCardProps {
 export function TiltCard({ children, className = "" }: TiltCardProps) {
   return (
     <div
-      className={`
-        bg-card border border-border p-6
-        shadow-sm
-        transition-all duration-200 ease-out
-        hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(31,78,121,0.12)]
-        ${className}
-      `}
-      style={{ borderRadius: "12px" }}
+      className={`bg-card border border-border p-6 mbs-card ${className}`}
     >
       {children}
     </div>
