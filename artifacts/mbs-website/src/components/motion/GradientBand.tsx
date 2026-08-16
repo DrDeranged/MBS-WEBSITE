@@ -16,7 +16,7 @@ export function GradientBand({ heading, ctaLabel, ctaHref }: GradientBandProps) 
       }}
     >
       {/* Noise texture */}
-      <NoiseOverlay opacity={0.04} />
+      <NoiseOverlay opacity={0.05} />
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
         <h2 className="font-heading font-bold text-3xl md:text-4xl text-white mb-10 leading-tight">

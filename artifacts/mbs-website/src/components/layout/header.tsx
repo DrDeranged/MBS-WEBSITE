@@ -61,10 +61,10 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors duration-150 hover:text-primary relative after:absolute after:-bottom-0.5 after:left-0 after:w-full after:h-0.5 after:rounded-full after:transition-transform after:duration-200 after:origin-left ${
+                className={`text-sm font-medium [text-decoration:none] transition-colors duration-150 relative after:absolute after:left-0 after:w-full after:h-px after:rounded-full after:transition-transform after:duration-200 after:origin-left ${
                   location === link.href
-                    ? "text-primary after:bg-primary after:scale-x-100"
-                    : "text-foreground after:bg-primary after:scale-x-0 hover:after:scale-x-100"
+                    ? "text-primary after:bg-[#17A567] after:scale-x-100 after:-bottom-[2px]"
+                    : "text-foreground after:bg-[#17A567] after:scale-x-0 hover:text-primary hover:after:scale-x-100 after:-bottom-[2px]"
                 }`}
               >
                 {link.label}

@@ -214,3 +214,22 @@
 @media (prefers-reduced-motion: reduce) {
   .mbs-marquee-track { animation-play-state: paused; }
 }
+
+/* ── Hero "simplified" underline draw ─────────────────────────────────────── */
+@keyframes mbs-underline-draw {
+  from { stroke-dashoffset: 280; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.mbs-underline-draw {
+  stroke-dasharray: 280;
+  stroke-dashoffset: 280;
+  animation: mbs-underline-draw 0.65s ease-out 0.35s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mbs-underline-draw {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+}

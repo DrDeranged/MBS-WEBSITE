@@ -11,7 +11,7 @@ interface NoiseOverlayProps {
  * Place inside a `position:relative overflow-hidden` parent.
  * Purely decorative — aria-hidden, pointer-events-none.
  */
-export function NoiseOverlay({ opacity = 0.035, className = "" }: NoiseOverlayProps) {
+export function NoiseOverlay({ opacity = 0.045, className = "" }: NoiseOverlayProps) {
   const uid = useId().replace(/:/g, "");
   const filterId = `mbs-n-${uid}`;
   return (

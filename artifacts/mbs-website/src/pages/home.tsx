@@ -133,7 +133,7 @@ function HeroMockPanel() {
         borderRadius: "12px",
       }}
     >
-      <NoiseOverlay opacity={0.04} />
+      <NoiseOverlay opacity={0.05} />
 
       <p className="relative z-10 text-xs font-semibold uppercase tracking-widest text-white/40 mb-6">
         Funding options
@@ -431,7 +431,7 @@ export default function Home() {
   return (
     <Layout>
       {/* ── A) HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden min-h-[calc(100vh-80px)] flex items-center bg-background pt-8 pb-16 md:pb-24">
+      <section className="relative overflow-hidden min-h-[calc(100vh-80px)] flex items-center bg-background pt-[64px] pb-16 md:pb-24">
         {/* Radial mesh gradient behind copy side */}
         <div
           aria-hidden="true"
@@ -444,10 +444,34 @@ export default function Home() {
         />
 
         <div className="relative z-10 mx-auto max-w-6xl px-6 w-full">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid md:grid-cols-2 xl:grid-cols-[44%_56%] gap-12 lg:gap-16 items-center">
             <Reveal delay={0}>
-              <h1 className="font-heading font-bold text-[36px] md:text-[56px] leading-[1.1] tracking-tight text-foreground mb-5">
-                Smart business funding, simplified
+              <h1
+                className="font-heading font-bold tracking-tight text-foreground mb-5"
+                style={{ fontSize: "clamp(40px, 5.5vw, 72px)", lineHeight: 1.05 }}
+              >
+                Smart business funding,{" "}
+                <span className="relative inline-block whitespace-nowrap">
+                  simplified
+                  {/* Animated go-green underline — CSS-driven, static under prefers-reduced-motion */}
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    viewBox="0 0 260 10"
+                    preserveAspectRatio="none"
+                    className="absolute left-0 w-full pointer-events-none overflow-visible"
+                    style={{ bottom: "-0.08em", height: "0.17em" }}
+                  >
+                    <path
+                      d="M3,6 C55,2 110,9 165,5 C210,2 240,7 257,5"
+                      fill="none"
+                      stroke="#17A567"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      className="mbs-underline-draw"
+                    />
+                  </svg>
+                </span>
               </h1>
               <p className="font-heading font-semibold text-xl md:text-2xl text-primary mb-6">
                 Get matched with the right financing
@@ -475,7 +499,7 @@ export default function Home() {
                 </a>
               </div>
             </Reveal>
-            <Reveal delay={150}>
+            <Reveal delay={150} className="xl:-mr-10">
               <HeroMockPanel />
             </Reveal>
           </div>
