@@ -3,9 +3,7 @@ import {
   motion,
   useReducedMotion,
   useScroll,
-  useTransform,
   useMotionValueEvent,
-  AnimatePresence,
 } from "framer-motion";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -320,7 +318,7 @@ const STEPS = [
 function HowItWorksSection() {
   const shouldReduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeStep, setActiveStep] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Scroll progress over the full 220 vh runway (desktop only but harmless on mobile)
   const { scrollYProgress } = useScroll({
@@ -328,37 +326,32 @@ function HowItWorksSection() {
     offset: ["start start", "end end"],
   });
 
-  // Drive active step index from scroll — update state for crossfading numeral
+  // Drive both the active step and its transition from one scroll value.
+  // Keeping this as one state value prevents four independently interpolated
+  // panels from piling up in the center of the viewport.
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setActiveStep(Math.min(3, Math.floor(v * 4)));
+    setScrollProgress(v);
   });
 
-  // Progress line fill — 0% → 100%
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const scaledProgress = Math.min(3.999999, Math.max(0, scrollProgress * 4));
+  const currentIndex = Math.min(3, Math.floor(scaledProgress));
+  const segmentProgress = scaledProgress - currentIndex;
+  const nextIndex = currentIndex < 3 ? currentIndex + 1 : null;
 
-  // ── Per-step motion values (always called in fixed order — hooks rule safe) ──
-  // Blend window: 0.08 wide between steps (entry overlaps exit of predecessor)
-  // Step 0 starts fully visible; step 3 ends fully visible.
-  const opacities = [
-    useTransform(scrollYProgress, [0, 0.21, 0.29], [1, 1, 0.25]),
-    useTransform(scrollYProgress, [0.17, 0.29, 0.46, 0.54], [0.25, 1, 1, 0.25]),
-    useTransform(scrollYProgress, [0.42, 0.54, 0.71, 0.79], [0.25, 1, 1, 0.25]),
-    useTransform(scrollYProgress, [0.67, 0.79, 1], [0.25, 1, 1]),
-  ];
-  const yValues = [
-    useTransform(scrollYProgress, [0, 0.21, 0.29], [0, 0, -24]),
-    useTransform(scrollYProgress, [0.17, 0.29, 0.46, 0.54], [24, 0, 0, -24]),
-    useTransform(scrollYProgress, [0.42, 0.54, 0.71, 0.79], [24, 0, 0, -24]),
-    useTransform(scrollYProgress, [0.67, 0.79, 1], [24, 0, 0]),
-  ];
-  const scaleValues = [
-    useTransform(scrollYProgress, [0, 0.21, 0.29], [1, 1, 0.97]),
-    useTransform(scrollYProgress, [0.17, 0.29, 0.46, 0.54], [0.97, 1, 1, 0.97]),
-    useTransform(scrollYProgress, [0.42, 0.54, 0.71, 0.79], [0.97, 1, 1, 0.97]),
-    useTransform(scrollYProgress, [0.67, 0.79, 1], [0.97, 1, 1]),
-  ];
+  // Hold each step for most of its 55vh segment, then use the final 28%
+  // for a readable overlap: current exits up 24px while next enters.
+  const transitionProgress = Math.min(
+    1,
+    Math.max(0, (segmentProgress - 0.72) / 0.28),
+  );
+  const currentOpacity = 1 - transitionProgress * 0.75;
+  const currentY = transitionProgress * -24;
+  const currentScale = 1 - transitionProgress * 0.03;
+  const nextOpacity = 0.25 + transitionProgress * 0.75;
+  const nextY = (1 - transitionProgress) * 24;
+  const nextScale = 0.97 + transitionProgress * 0.03;
 
-  const step = STEPS[activeStep];
+  const step = STEPS[currentIndex];
 
   // ── Shared: stacked list for mobile + reduced-motion ─────────────────────
   const stackedList = (
@@ -446,13 +439,13 @@ function HowItWorksSection() {
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: lineHeight,
+                    height: `${scrollProgress * 100}%`,
                     background: GREEN,
                   }}
                 />
               </div>
 
-              {/* Numeral — crossfades with each step */}
+              {/* Numeral — uses the exact same derived index as the right panel. */}
               <div
                 style={{
                   position: "relative",
@@ -460,51 +453,77 @@ function HowItWorksSection() {
                   overflow: "hidden",
                 }}
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeStep}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.24, ease: "easeInOut" }}
-                    className="absolute inset-0 font-heading font-bold tabular-nums"
-                    style={{
-                      fontSize: "clamp(96px, 11vw, 152px)",
-                      lineHeight: 0.88,
-                      color: "rgba(23,165,103,0.14)",
-                    }}
-                  >
-                    {step.num}
-                  </motion.div>
-                </AnimatePresence>
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute inset-0 font-heading font-bold tabular-nums"
+                  style={{
+                    fontSize: "clamp(96px, 11vw, 152px)",
+                    lineHeight: 0.88,
+                    color: "rgba(23,165,103,0.14)",
+                  }}
+                >
+                  {step.num}
+                </motion.div>
               </div>
 
               <div className="mt-6 w-10 h-px" style={{ backgroundColor: GREEN }} />
 
-              {/* Step title label */}
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={activeStep}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="font-heading font-semibold text-sm mt-4 max-w-[200px]"
-                  style={{ color: CLOUD }}
-                >
-                  {step.title}
-                </motion.p>
-              </AnimatePresence>
+              {/* Step title label — kept in lockstep with the right panel. */}
+              <motion.p
+                key={currentIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.16, ease: "easeOut" }}
+                className="font-heading font-semibold text-sm mt-4 max-w-[200px]"
+                style={{ color: CLOUD }}
+              >
+                {step.title}
+              </motion.p>
             </div>
 
-            {/* RIGHT — scroll-driven step panels (all absolutely stacked) */}
+            {/* RIGHT — one current panel plus its entering successor */}
             <div
               className="relative border-l"
               style={{ borderColor: "rgba(255,255,255,0.06)" }}
             >
-              {STEPS.map((s, i) => (
+              <motion.div
+                key={`current-${currentIndex}`}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  paddingLeft: "56px",
+                  paddingRight: "32px",
+                  opacity: currentOpacity,
+                  transform: `translateY(${currentY}px) scale(${currentScale})`,
+                  transformOrigin: "center center",
+                }}
+              >
+                <h3
+                  className="font-heading font-bold mb-5 leading-tight"
+                  style={{
+                    fontSize: "clamp(28px, 4vw, 48px)",
+                    color: CLOUD,
+                  }}
+                >
+                  {STEPS[currentIndex].title}
+                </h3>
+                <p
+                  className="text-lg leading-relaxed max-w-lg"
+                  style={{ color: "rgba(234,241,248,0.52)" }}
+                >
+                  {STEPS[currentIndex].copy}
+                </p>
+              </motion.div>
+
+              {nextIndex !== null && transitionProgress > 0 && (
                 <motion.div
-                  key={s.num}
+                  key={`next-${nextIndex}`}
                   style={{
                     position: "absolute",
                     inset: 0,
@@ -513,9 +532,9 @@ function HowItWorksSection() {
                     justifyContent: "center",
                     paddingLeft: "56px",
                     paddingRight: "32px",
-                    opacity: opacities[i],
-                    y: yValues[i],
-                    scale: scaleValues[i],
+                    opacity: nextOpacity,
+                    transform: `translateY(${nextY}px) scale(${nextScale})`,
+                    transformOrigin: "center center",
                   }}
                 >
                   <h3
@@ -525,16 +544,16 @@ function HowItWorksSection() {
                       color: CLOUD,
                     }}
                   >
-                    {s.title}
+                    {STEPS[nextIndex].title}
                   </h3>
                   <p
                     className="text-lg leading-relaxed max-w-lg"
                     style={{ color: "rgba(234,241,248,0.52)" }}
                   >
-                    {s.copy}
+                    {STEPS[nextIndex].copy}
                   </p>
                 </motion.div>
-              ))}
+              )}
             </div>
           </div>
         </div>
