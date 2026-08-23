@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import {
   motion,
   useReducedMotion,
-  useScroll,
-  useMotionValueEvent,
 } from "framer-motion";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -291,7 +289,7 @@ function IndustryMarquee() {
   );
 }
 
-// ── How It Works — ONE pinned section ────────────────────────────────────────
+// ── How It Works — static responsive timeline ─────────────────────────────────
 const STEPS = [
   {
     num: "01",
@@ -316,251 +314,79 @@ const STEPS = [
 ];
 
 function HowItWorksSection() {
-  const shouldReduceMotion = useReducedMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  // Scroll progress over the full 220 vh runway (desktop only but harmless on mobile)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Drive both the active step and its transition from one scroll value.
-  // Keeping this as one state value prevents four independently interpolated
-  // panels from piling up in the center of the viewport.
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setScrollProgress(v);
-  });
-
-  const scaledProgress = Math.min(3.999999, Math.max(0, scrollProgress * 4));
-  const currentIndex = Math.min(3, Math.floor(scaledProgress));
-  const segmentProgress = scaledProgress - currentIndex;
-  const nextIndex = currentIndex < 3 ? currentIndex + 1 : null;
-
-  // Hold each step for most of its 55vh segment, then use the final 28%
-  // for a readable overlap: current exits up 24px while next enters.
-  const transitionProgress = Math.min(
-    1,
-    Math.max(0, (segmentProgress - 0.72) / 0.28),
-  );
-  const currentOpacity = 1 - transitionProgress * 0.75;
-  const currentY = transitionProgress * -24;
-  const currentScale = 1 - transitionProgress * 0.03;
-  const nextOpacity = 0.25 + transitionProgress * 0.75;
-  const nextY = (1 - transitionProgress) * 24;
-  const nextScale = 0.97 + transitionProgress * 0.03;
-
-  const step = STEPS[currentIndex];
-
-  // ── Shared: stacked list for mobile + reduced-motion ─────────────────────
-  const stackedList = (
-    <div className="py-16 px-6 max-w-6xl mx-auto">
-      <p
-        className="text-[11px] font-semibold uppercase tracking-widest mb-12"
-        style={{ color: "rgba(255,255,255,0.28)" }}
-      >
-        How it works
-      </p>
-      {STEPS.map((s, i) => (
-        <Reveal key={s.num} delay={i * 80}>
-          <div className="flex gap-6 mb-12">
-            <div
-              className="font-heading font-bold tabular-nums flex-none"
-              style={{
-                fontSize: "56px",
-                lineHeight: 0.88,
-                color: "rgba(23,165,103,0.18)",
-                width: "64px",
-              }}
-            >
-              {s.num}
-            </div>
-            <div className="pt-1">
-              <h3
-                className="font-heading font-bold mb-3"
-                style={{ fontSize: "clamp(22px, 4vw, 32px)", color: CLOUD }}
-              >
-                {s.title}
-              </h3>
-              <p
-                className="text-base leading-relaxed"
-                style={{ color: "rgba(234,241,248,0.52)" }}
-              >
-                {s.copy}
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      ))}
-    </div>
-  );
-
-  // ── Reduced-motion: static list at all breakpoints ────────────────────────
-  if (shouldReduceMotion) {
-    return (
-      <section id="how-it-works" style={{ backgroundColor: INK }}>
-        {stackedList}
-      </section>
-    );
-  }
-
   return (
-    <section id="how-it-works" ref={sectionRef} style={{ backgroundColor: INK }}>
-      {/* ── DESKTOP — 220 vh pinned scroll ─────────────────────────────────── */}
-      <div className="hidden md:flex flex-col" style={{ height: "220vh" }}>
-        {/* Sticky viewport-height panel */}
-        <div className="sticky top-0 w-full overflow-hidden" style={{ height: "100vh" }}>
+    <section id="how-it-works" style={{ backgroundColor: INK }}>
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <p
+          className="text-[11px] font-semibold uppercase tracking-widest mb-16"
+          style={{ color: "rgba(234,241,248,0.68)" }}
+        >
+          How it works
+        </p>
+
+        <div className="relative">
+          {/* Static rails stay in the document flow and never react to scroll. */}
           <div
-            className="mx-auto max-w-6xl px-6 h-full grid"
-            style={{ gridTemplateColumns: "260px 1fr" }}
-          >
-            {/* LEFT — label · progress line · numeral · step title */}
-            <div className="flex flex-col justify-center py-12 pr-8">
-              <p
-                className="text-[11px] font-semibold uppercase tracking-widest mb-8"
-                style={{ color: "rgba(255,255,255,0.28)" }}
+            aria-hidden="true"
+            className="absolute left-[10px] top-2 bottom-3 w-px md:hidden"
+            style={{ backgroundColor: "rgba(255,255,255,0.14)" }}
+          />
+          <div
+            aria-hidden="true"
+            className="absolute left-[12.5%] right-[12.5%] top-[85px] hidden h-px md:block"
+            style={{ backgroundColor: "rgba(255,255,255,0.14)" }}
+          />
+
+          <ol className="grid gap-y-12 md:grid-cols-4 md:gap-x-8 md:gap-y-0">
+            {STEPS.map((step, i) => (
+              <li
+                key={step.num}
+                className="relative pl-12 pb-2 last:pb-0 md:pl-0 md:pt-28 md:pb-0"
               >
-                How it works
-              </p>
-
-              {/* Continuous progress line */}
-              <div
-                className="relative mb-8"
-                style={{
-                  width: "1px",
-                  height: "100px",
-                  background: "rgba(255,255,255,0.08)",
-                }}
-              >
-                <motion.div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: `${scrollProgress * 100}%`,
-                    background: GREEN,
-                  }}
-                />
-              </div>
-
-              {/* Numeral — uses the exact same derived index as the right panel. */}
-              <div
-                style={{
-                  position: "relative",
-                  height: "clamp(96px, 11vw, 152px)",
-                  overflow: "hidden",
-                }}
-              >
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  className="absolute inset-0 font-heading font-bold tabular-nums"
-                  style={{
-                    fontSize: "clamp(96px, 11vw, 152px)",
-                    lineHeight: 0.88,
-                    color: "rgba(23,165,103,0.14)",
-                  }}
-                >
-                  {step.num}
-                </motion.div>
-              </div>
-
-              <div className="mt-6 w-10 h-px" style={{ backgroundColor: GREEN }} />
-
-              {/* Step title label — kept in lockstep with the right panel. */}
-              <motion.p
-                key={currentIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.16, ease: "easeOut" }}
-                className="font-heading font-semibold text-sm mt-4 max-w-[200px]"
-                style={{ color: CLOUD }}
-              >
-                {step.title}
-              </motion.p>
-            </div>
-
-            {/* RIGHT — one current panel plus its entering successor */}
-            <div
-              className="relative border-l"
-              style={{ borderColor: "rgba(255,255,255,0.06)" }}
-            >
-              <motion.div
-                key={`current-${currentIndex}`}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  paddingLeft: "56px",
-                  paddingRight: "32px",
-                  opacity: currentOpacity,
-                  transform: `translateY(${currentY}px) scale(${currentScale})`,
-                  transformOrigin: "center center",
-                }}
-              >
-                <h3
-                  className="font-heading font-bold mb-5 leading-tight"
-                  style={{
-                    fontSize: "clamp(28px, 4vw, 48px)",
-                    color: CLOUD,
-                  }}
-                >
-                  {STEPS[currentIndex].title}
-                </h3>
-                <p
-                  className="text-lg leading-relaxed max-w-lg"
-                  style={{ color: "rgba(234,241,248,0.52)" }}
-                >
-                  {STEPS[currentIndex].copy}
-                </p>
-              </motion.div>
-
-              {nextIndex !== null && transitionProgress > 0 && (
-                <motion.div
-                  key={`next-${nextIndex}`}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    paddingLeft: "56px",
-                    paddingRight: "32px",
-                    opacity: nextOpacity,
-                    transform: `translateY(${nextY}px) scale(${nextScale})`,
-                    transformOrigin: "center center",
-                  }}
-                >
-                  <h3
-                    className="font-heading font-bold mb-5 leading-tight"
+                <Reveal delay={i * 100} className="relative">
+                  <span
+                    aria-hidden="true"
+                    className="absolute -left-[44px] top-2 h-3 w-3 rounded-full border-2 md:left-1/2 md:top-[-33px] md:-translate-x-1/2"
                     style={{
-                      fontSize: "clamp(28px, 4vw, 48px)",
-                      color: CLOUD,
+                      backgroundColor: INK,
+                      borderColor: GREEN,
+                      boxShadow: `0 0 0 4px ${INK}`,
+                    }}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-0 top-[-18px] font-heading font-bold tabular-nums md:left-1/2 md:top-[-112px] md:-translate-x-1/2"
+                    style={{
+                      color: "rgba(23,165,103,0.08)",
+                      fontSize: "clamp(76px, 8vw, 116px)",
+                      lineHeight: 0.82,
                     }}
                   >
-                    {STEPS[nextIndex].title}
-                  </h3>
-                  <p
-                    className="text-lg leading-relaxed max-w-lg"
-                    style={{ color: "rgba(234,241,248,0.52)" }}
-                  >
-                    {STEPS[nextIndex].copy}
-                  </p>
-                </motion.div>
-              )}
-            </div>
-          </div>
+                    {step.num}
+                  </span>
+                  <div className="relative pt-10 md:pt-0 md:text-center">
+                    <h3
+                      className="font-heading font-bold leading-tight"
+                      style={{
+                        color: CLOUD,
+                        fontSize: "clamp(22px, 2.2vw, 30px)",
+                      }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      className="mt-4 max-w-xs text-base leading-relaxed md:mx-auto"
+                      style={{ color: "rgba(234,241,248,0.52)" }}
+                    >
+                      {step.copy}
+                    </p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
-
-      {/* ── MOBILE — plain stacked steps, no pin ───────────────────────────── */}
-      <div className="md:hidden">{stackedList}</div>
     </section>
   );
 }
