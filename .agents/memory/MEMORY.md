@@ -1,0 +1,5 @@
+- [GitHub push pattern](github-push-pattern.md) — blob→tree→commit→PATCH ref; sequential inside one impure fn; setTimeout ok inside impure, NOT in durable scope
+- [Blog data model](blog-data-model.md) — posts live in src/content/blog.ts as TS (not markdown); BlogPost has slug/title/date/readTime/excerpt/sections[{heading?,body}]
+- [Art direction V2 design system](art-direction-v2.md) — ink-first 60/40 dark/light; palette, layout rules, component list, and per-page dark-header status
+- [Pinned scroll synchronization](pinned-scroll-synchronization.md) — derive panels and indicators from one scroll state to prevent visual drift and stack pile-ups.
+- [Browser screenshot capture](browser-screenshot-capture.md) — use CDP full-page capture for viewport-sensitive pages; oversized preview screenshots distort vh layouts.
