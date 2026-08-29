@@ -1,49 +1,43 @@
 # How to prepare your business funding application
 
-Applying for business financing doesn't have to be stressful or complicated. The process goes faster and tends to go better when you know what to expect and gather the right things before you start. Here's a straightforward guide to getting ready.
+Preparing a business funding application is easier when you treat it as a clear explanation of how your company operates. You do not need to make the business look perfect. You need to provide accurate information, organize the documents a lender is likely to request, and explain what the money would help you accomplish.
 
-## What most applications ask for
+## Gather the basic business details
 
-Business funding applications vary by lender and product, but most ask for a consistent core set of information. You'll typically need your business name, the type of business you run, how long you've been in operation, your approximate monthly or annual revenue, and what you plan to use the funds for.
+Start with the facts that define your company: legal business name, structure, industry, operating address, ownership details, and the date operations began. Have a reliable description of what the business sells, who it serves, and how it generates revenue.
 
-Beyond the basics, lenders almost always want to see recent business bank statements — usually three to six months. These are the most important documents in most applications because they show how your business actually operates, not just what you've reported on paper.
+You should also know your current revenue pattern, major expenses, existing obligations, and the amount of funding you are considering. These figures do not need to be memorized exactly, but they should agree with the documents you provide. If revenue changes with the season or a particular contract, make a note so the context is clear.
 
-Some applications also ask for a copy of a government-issued ID, your business address, and basic contact information. Depending on the product and amount, you may be asked for tax returns, profit and loss statements, or other financial documents. But for many small business lending products, bank statements are the main event.
+## Organize financial documents
 
-## Start with your bank statements
+Recent business bank statements are central to many funding reviews because they show real deposits and expenses. Download complete documents from your bank rather than screenshots of a transaction list. Check that the business name, account information, and statement period are visible.
 
-Before you do anything else, log in to your business bank account and download your three most recent full monthly statements. Make sure they're the complete statements — not summaries or mini-statements — and that each one clearly shows your business name and account number.
+If the business uses more than one account, gather the records that provide a complete picture. Leaving out an account can create confusion if transfers or deposits appear elsewhere. Store the files in a clearly named folder so you can find them quickly when an application asks for an upload.
 
-If you have more than one business account, download statements from all of them. Lenders want a complete picture of your business finances, not just the account that looks best.
+Depending on the product, a lender may also request tax returns, profit and loss statements, balance sheets, proof of ownership, identification, licenses, or invoices. Requirements vary, so do not send documents that were not requested. Keep the originals secure and provide copies through the lender's approved process.
 
-Keep these files somewhere you can find them easily. Most applications let you upload them directly. Having them ready before you start means you won't have to stop mid-application to track them down.
+## Define the purpose of the funds
 
-## Know your basic numbers
+Explain what the financing will do for the business. A specific purpose helps a lender determine whether the proposed product fits the need. You might be purchasing equipment, covering inventory, managing payroll during a seasonal gap, renovating a location, or consolidating business obligations.
 
-You don't need to have your financials memorized down to the penny, but you should know a few key numbers:
+Describe the expected business impact without promising an outcome. For example, explain which capacity the equipment would add, which operating expense the working capital would cover, or how a timing gap affects your normal operations. Clear details are more useful than broad statements about growth.
 
-Your monthly revenue — roughly what comes in on an average month. Your time in business — how many years and months you've been operating under this business name. And the amount you're looking for — even a ballpark helps narrow down which products make sense.
+## Review your cash flow
 
-If you're not sure what your monthly revenue is, your bank statements will tell you. Add up the deposits for one or two recent months and you'll have a reasonable working number.
+Before applying, compare the timing of deposits with recurring expenses. Look for periods when the balance becomes tight and consider what causes them. Make sure the repayment you are considering leaves room for taxes, payroll, supplier bills, rent, and ordinary surprises.
 
-## Have a clear purpose in mind
+This review is also a chance to find inconsistencies. A personal transfer may look like revenue in a statement. A large purchase may need an explanation. An existing loan payment may not appear in the summary you first prepared. Correcting the story before submission is easier than answering avoidable questions later.
 
-Lenders often ask what you plan to use the funds for. This isn't a trick question, and you don't need a formal business plan to answer it. They're trying to understand whether the product they're offering is the right match for your need.
+## Prepare for follow-up questions
 
-If you're buying equipment, say so. If you need to cover payroll during a slow season, explain that. If you want to open a second location or refinance existing debt, be specific. A clear, honest answer to this question helps lenders make better decisions — and helps you get matched with the right product.
+After you submit an application, the review may involve requests for additional documents or clarification. Respond with complete files and direct explanations. If an item in your statements looks unusual, explain what happened, when it happened, and what is different now.
 
-## What happens after you apply
+Avoid guessing or changing details to make the application sound stronger. Lenders compare the application with financial records, and an accurate explanation builds more confidence than an overly polished one. If you do not know an answer, say so and find the correct information.
 
-Once you submit an application, it goes through a review process. The specifics vary by lender, but generally you can expect your information to be matched against lender criteria for different products. You may receive offers from multiple lenders, each with different terms and structures.
+## Compare the full offer
 
-You might be asked for additional documentation at this stage — a specific bank statement, an explanation for something in your history, or proof of business ownership. Responding quickly and completely to these requests keeps things moving.
+If you receive funding options, read beyond the approved amount. Review the payment schedule, total repayment, fees, collateral or guarantees, prepayment language, and any restrictions on use. Compare each structure with your actual cash flow and business purpose.
 
-You'll then have the chance to compare offers and decide what fits. No offer is an obligation. You can take your time, ask questions, and walk away if nothing is right for your situation.
+MBS can help you start that comparison through a single application across a range of funding options. Preparing carefully gives lenders a clearer picture and gives you a stronger basis for deciding what fits.
 
-## A few things that help your application
-
-Applying with a business bank account, not a personal one, signals that your business is established and organized. Being transparent about your history — including anything that might look unusual — builds credibility. And knowing what you want and why makes the conversation with any lender much more direct.
-
-The goal isn't to present a perfect picture. It's to present an accurate one so that lenders can give you a real answer.
-
-[Start your application now](https://app.my-business-solutions.com/apply) — one application covers all of MBS's funding products and multiple lender relationships.
+[Start your application now](https://app.my-business-solutions.com/apply)

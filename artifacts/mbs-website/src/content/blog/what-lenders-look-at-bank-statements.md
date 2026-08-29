@@ -1,41 +1,41 @@
 # What lenders actually look at in your bank statements
 
-Bank statements are the first thing most business lenders ask for — and for good reason. Where a tax return tells lenders what your business earned in a given year, bank statements show them how your business actually operates month to month. Understanding what they're looking for can help you put your best application forward.
+Bank statements give a lender a practical view of how a business operates. A tax return or financial statement can describe performance over a period, but the bank account shows cash arriving, bills leaving, and the way the business manages the space between those two events. Understanding those signals can help you prepare a clearer application.
 
-## Why bank statements carry so much weight
+## Cash flow that can support repayment
 
-A lender's core question is simple: can this business reliably make a payment? Bank statements answer that question more directly than almost any other document. They show real cash moving in and out of a real account, in real time. They're harder to manipulate than self-reported numbers, and they capture patterns that annual figures miss entirely — like whether your business goes through predictable slow seasons, or whether expenses consistently outpace revenue in certain months.
+The central question is whether the business can reasonably handle a new obligation. Lenders look for evidence that revenue enters the account consistently and that regular expenses can be covered without the balance repeatedly reaching a crisis point.
 
-For most small business lenders, three to six months of bank statements is the minimum. Some want more. The more consistent and transparent the picture those statements paint, the easier the decision.
+This is not a search for a perfect statement. Businesses have slow periods, unexpected repairs, late customer payments, and changing costs. What matters is the overall pattern and whether the business owner understands it. A statement that includes a difficult month can still tell a coherent story when the cause and recovery are clear.
 
-## Average daily balance
+## Deposit activity
 
-Lenders pay close attention to your average daily balance over the statement period. This number tells them whether your business has a working cushion — money left over after day-to-day expenses clear — or whether every incoming dollar gets spent immediately.
+Deposit activity helps show where revenue comes from and how dependable it is. A steady stream of customer payments generally gives a clearer picture than an unexplained transfer or a single unusually large deposit. Lenders may compare deposit patterns with the revenue you report in the application and ask questions when the two do not appear to match.
 
-A low or volatile average daily balance doesn't automatically disqualify you, but it does raise questions. It suggests that a slow week or an unexpected expense could push the business into trouble. A healthy cushion doesn't need to be large in absolute terms; it just needs to be enough to absorb normal variation without hitting zero.
+Seasonality is not automatically a problem. A business that earns more during a particular season can explain the pattern and show how it plans for quieter periods. If a large deposit came from an owner contribution, a loan, a sale of equipment, or another non-operating source, label it accurately rather than presenting it as customer revenue.
 
-## Deposit volume and consistency
+## Balances and available cushion
 
-Lenders look at how much comes in and how regularly. Consistent deposits across many transactions over the course of each month signal an operating business with real, recurring revenue. That's what they want to see.
+The balance at the end of each statement period is only part of the picture. Lenders may also consider whether the account usually holds enough cash to absorb normal timing changes. A business that regularly finishes a cycle with no room for an ordinary expense may have less flexibility when a new payment is added.
 
-What gives them pause: a single large deposit with no other activity, long gaps between transactions, or sharp drops in deposit volume from one month to the next. If your bank statements show patterns like these, you should be prepared to explain them. A good explanation doesn't hurt you — silence or confusion does.
+A strong balance alone does not prove that financing is affordable. Money may be set aside for taxes, payroll, inventory, or another obligation. Be prepared to explain important reserves and transfers so the account is understood in context.
 
-## Overdrafts and returned items
+## Overdrafts and returned payments
 
-Overdrafts and non-sufficient funds events are red flags for most lenders. A single overdraft during an otherwise clean history is usually not disqualifying, but a pattern of them tells a clear story: the business routinely runs out of cash before the next deposit arrives.
+Overdrafts, insufficient-funds events, and returned payments can suggest that expenses are arriving before revenue. An isolated issue may have a straightforward explanation. A repeated pattern deserves attention because it can indicate that the business is relying on incoming money before it is actually available.
 
-The same applies to returned items — payments that bounce because there wasn't enough in the account to cover them. Even if things have improved since, lenders may want to understand what caused the pattern and what changed.
+Do not hide or edit around these events. Instead, identify what caused them and what changed. A delayed customer payment, equipment failure, bookkeeping problem, or seasonal slowdown can be explained. The goal is to show that you recognize the issue and have a practical way to manage it.
 
-If your statements show overdrafts, don't try to hide them. A straightforward explanation — a major client was late to pay, a piece of equipment failed unexpectedly, a slow season hit harder than usual — goes a long way. Lenders work with businesses through all kinds of circumstances. What they can't work with is a story that doesn't add up.
+## Existing obligations and unusual activity
 
-## Other things that get noticed
+Payments to other lenders, frequent transfers between personal and business accounts, large cash deposits, and rapid withdrawals can prompt follow-up questions. These activities are not automatically disqualifying, but they make it more important to keep your application consistent and your explanation specific.
 
-Large and unexplained cash deposits can raise questions about the nature of the revenue. Payments to what appear to be other lenders signal existing debt obligations. Rapid drawdowns of the balance at the end of each month may indicate tight margins. None of these are automatic disqualifiers, but they can prompt follow-up questions.
+Use a business account for business activity whenever possible. Separating personal and business spending makes the cash-flow story easier to follow and gives you a cleaner record to review before submitting documents.
 
-## How to prepare before you apply
+## How to prepare your statements
 
-Pull your last three to six months of full business bank statements from your bank's portal. Read through them yourself. Look for the patterns described above. If anything looks unusual — a spike, a gap, an overdraft — think through what caused it and how you'd explain it clearly.
+Download complete statements directly from your bank and make sure the business name, account details, transaction history, and statement periods are visible. Review the documents yourself before uploading them. Mark any unusual deposit, transfer, or payment and prepare a short explanation in plain language.
 
-Having clean, organized statements and the ability to speak plainly about your business finances makes the process faster and improves your chances of a strong outcome.
+Organized statements can make the review more efficient and help a lender understand the real business behind the numbers. When you are ready, MBS can help you explore funding options that fit your business profile.
 
-[Apply through MBS when you're ready](https://app.my-business-solutions.com/apply) — we'll match you with lenders suited to your actual profile.
+[Apply through MBS when you're ready](https://app.my-business-solutions.com/apply)

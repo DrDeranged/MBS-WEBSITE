@@ -332,7 +332,7 @@ const DEFAULT_BAND_APR = 24;
 export default function Calculator() {
   usePageMeta(
     "Business Funding Calculator | My Business Solutions",
-    "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, weekly, or daily payments.",
+    "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
   );
 
   // ── Control state ───────────────────────────────────────────────────────────

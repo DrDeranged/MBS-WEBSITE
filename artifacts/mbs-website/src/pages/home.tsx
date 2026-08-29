@@ -415,7 +415,7 @@ const WHY_US = [
 const MINI_MIN = 10_000;
 const MINI_MAX = 500_000;
 const MINI_STEP = 5_000;
-const MINI_FREQ_OPTIONS: Frequency[] = ["Monthly", "Bi-weekly", "Weekly"];
+const MINI_FREQ_OPTIONS: Frequency[] = ["Monthly", "Bi-weekly", "Weekly", "Daily"];
 
 function MiniCalc() {
   const [amount, setAmount] = useState(100_000);
@@ -781,7 +781,7 @@ export default function Home() {
       {/* ── C½) INDUSTRY MARQUEE — ink theme ──────────────────────────────── */}
       <IndustryMarquee />
 
-      {/* ── D) HOW IT WORKS — pinned scroll (one pinned section, per spec) ── */}
+      {/* ── D) HOW IT WORKS — static responsive timeline ─────────────────── */}
       <HowItWorksSection />
 
       {/* ── E) BENTO WHY-US — ink theme, green square markers ─────────────── */}

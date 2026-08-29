@@ -1,8 +1,9 @@
-export type Frequency = "Daily" | "Weekly" | "Monthly";
+export type Frequency = "Daily" | "Weekly" | "Bi-weekly" | "Monthly";
 
-/** Business-day periods per year by payment frequency */
+/** Periods per year by payment frequency */
 export const PERIODS_PER_YEAR: Record<Frequency, number> = {
   Monthly: 12,
+  "Bi-weekly": 26,
   Weekly: 52,
   Daily: 252,
 };
@@ -23,7 +24,8 @@ export interface CalcResult {
  *   P = principal × r(1+r)^n / ((1+r)^n − 1)
  * where:
  *   r = APR / periodsPerYear
- *   n = termMonths converted to periods (Monthly=1×, Weekly=52/12×, Daily=252/12×)
+ *   n = termMonths converted to periods (Monthly=1×, Bi-weekly=26/12×,
+ *       Weekly=52/12×, Daily=252/12×)
  *
  * Handles r = 0 (interest-free) and n = 0 gracefully.
  */
