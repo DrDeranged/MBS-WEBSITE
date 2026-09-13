@@ -1,31 +1,11 @@
 import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import { logger } from "../lib/logger";
+import { createFixedWindowRateLimiter } from "../lib/rateLimiter";
 
 const router = Router();
 
-// ── In-memory rate limiter: 10 req/min per IP ─────────────────────────────
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
-    return true;
-  }
-  if (entry.count >= 10) return false;
-  entry.count++;
-  return true;
-}
-
-// Prune stale entries every 5 min so the map doesn't grow unbounded
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if (now > entry.resetAt) rateLimitMap.delete(ip);
-  }
-}, 5 * 60_000);
+const checkAssistRateLimit = createFixedWindowRateLimiter(10, 60_000);
 
 // ── System prompt (verbatim behavior contract) ────────────────────────────
 const SYSTEM_PROMPT =
@@ -39,38 +19,55 @@ const anthropic = new Anthropic({
 
 // ── POST /api/assist ──────────────────────────────────────────────────────
 router.post("/assist", async (req, res) => {
-  const ip =
-    (req.headers["x-forwarded-for"] as string | undefined)?.split(",")[0].trim() ??
-    req.ip ??
-    "unknown";
-
-  if (!checkRateLimit(ip)) {
-    res.status(429).json({ error: "Too many requests. Please wait a minute and try again." });
-    return;
-  }
-
   const { messages } = req.body as { messages?: unknown };
   if (!Array.isArray(messages) || messages.length === 0) {
     res.status(400).json({ error: "messages array is required" });
     return;
   }
+  if (messages.length > 20) {
+    res.status(400).json({ error: "Too many messages provided" });
+    return;
+  }
 
   // Validate message shape and strip anything unsafe
   const chatMessages: Anthropic.MessageParam[] = [];
+  let totalCharacters = 0;
   for (const m of messages) {
+    const value =
+      m && typeof m === "object"
+        ? (m as Record<string, unknown>)
+        : null;
     if (
-      m &&
-      typeof m === "object" &&
-      (m as Record<string, unknown>).role === "user" || (m as Record<string, unknown>).role === "assistant"
+      value &&
+      (value.role === "user" || value.role === "assistant") &&
+      typeof value.content === "string"
     ) {
-      const role = (m as Record<string, unknown>).role as "user" | "assistant";
-      const content = String((m as Record<string, unknown>).content ?? "").slice(0, 4000);
-      if (content) chatMessages.push({ role, content });
+      const content = value.content.trim().slice(0, 4000);
+      totalCharacters += content.length;
+      if (content) {
+        chatMessages.push({
+          role: value.role as "user" | "assistant",
+          content,
+        });
+      }
     }
   }
 
   if (chatMessages.length === 0) {
     res.status(400).json({ error: "No valid messages provided" });
+    return;
+  }
+  if (totalCharacters > 16_000) {
+    res.status(400).json({ error: "Conversation is too long" });
+    return;
+  }
+
+  const ip = req.ip ?? "unknown";
+  if (!checkAssistRateLimit(ip)) {
+    res.setHeader("Retry-After", "60");
+    res
+      .status(429)
+      .json({ error: "Too many requests. Please wait a minute and try again." });
     return;
   }
 

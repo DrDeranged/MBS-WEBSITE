@@ -81,20 +81,30 @@ export default function Contact() {
       message: message.trim(),
     });
 
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      try {
-        const resp = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body,
-        });
-        setStatus(resp.ok ? "success" : "error");
-        return;
-      } catch {
-        if (attempt === 1) {
-          setStatus("error");
-        }
-      }
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 15_000);
+
+    try {
+      const resp = await fetch(SUBMIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+        signal: controller.signal,
+      });
+      const result = (await resp.json().catch(() => null)) as {
+        success?: unknown;
+        leadId?: unknown;
+      } | null;
+      const accepted =
+        resp.ok &&
+        result?.success === true &&
+        (typeof result.leadId === "number" ||
+          typeof result.leadId === "string");
+      setStatus(accepted ? "success" : "error");
+    } catch {
+      setStatus("error");
+    } finally {
+      clearTimeout(timeout);
     }
   };
 

@@ -28,3 +28,16 @@ Live verification target: `https://my-business-solutions.com`
 ### Required `www` action
 
 In Replit Publishing, add `www.my-business-solutions.com` as a separate custom domain. Replit will provide its own A and TXT records. Add those exact records in GoDaddy, retain the TXT record for SSL renewal, then complete Replit verification. Do not reuse or guess the apex values.
+
+## W3 — Forms and integrations
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Contact → CRM | PASS | One non-personal submission labeled `LAUNCH-TEST — DELETE` returned HTTP 200 with `success: true` and a lead receipt. It requires manual CRM deletion. |
+| Contact failure safety | PASS after fix | Submission now has a 15-second timeout, no blind retry, and requires the documented success response instead of accepting any 2xx. |
+| Apply CTA attribution | PASS | Live calculator and representative destination checks preserve `src`; a representative `type` query is also preserved by the destination. |
+| Calculator handoff | PARTIAL | Live URL preserves `amount=75000`, `term=12`, and `freq=Monthly`. The external application starts with financing type and exposes no prefill fields on step 1, so visible field prefill requires later-step/manual confirmation. |
+| MbsAssist stream | PASS | One short live request returned SSE content events, `X-Accel-Buffering: no`, and a final done event. |
+| MbsAssist validation | PASS after fix | Invalid, null, and oversized conversations return 400 before rate-limit/model use; request body is capped at 32 KB and unapproved origins return 403. |
+| MbsAssist limiter | PASS | Dependency-free local test allowed requests 1–10 and rejected request 11 without invoking the model. |
+| Application status | PASS | `/apply/status` returns 200 without redirect. |
