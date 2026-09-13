@@ -5,16 +5,12 @@ export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
     const video = ref.current;
     if (!video) return;
 
-    const motionQuery = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
     let retryAttached = false;
 
     const retryPlayback = () => {
       retryAttached = false;
       if (
-        document.visibilityState === "visible" &&
-        !motionQuery.matches
+        document.visibilityState === "visible"
       ) {
         void video.play().catch(() => {
           // Autoplay is blocked; the branded poster remains visible.
@@ -23,10 +19,11 @@ export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
     };
 
     const playWhenAllowed = () => {
+      video.defaultMuted = true;
       video.muted = true;
+      video.setAttribute("muted", "");
       if (
-        document.visibilityState !== "visible" ||
-        motionQuery.matches
+        document.visibilityState !== "visible"
       ) {
         video.pause();
         return;
@@ -48,18 +45,14 @@ export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
       }
     };
 
-    const handleMotionChange = () => playWhenAllowed();
-
     playWhenAllowed();
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    motionQuery.addEventListener("change", handleMotionChange);
 
     return () => {
       document.removeEventListener(
         "visibilitychange",
         handleVisibilityChange,
       );
-      motionQuery.removeEventListener("change", handleMotionChange);
       video.removeEventListener("canplay", retryPlayback);
       video.pause();
     };

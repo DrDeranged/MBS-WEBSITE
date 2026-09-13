@@ -584,8 +584,8 @@ export default function Home() {
           preload="metadata"
           aria-hidden="true"
         >
-          <source src="/videos/hero-band.webm" type="video/webm" />
           <source src="/videos/hero-band.mp4" type="video/mp4" />
+          <source src="/videos/hero-band.webm" type="video/webm" />
         </video>
 
         {/* Ink gradient overlay — 85 % left (copy) → 40 % right (glass panel) */}
