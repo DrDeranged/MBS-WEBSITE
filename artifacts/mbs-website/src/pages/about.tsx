@@ -15,7 +15,11 @@ function StepIcon({ slug, alt }: { slug: string; alt: string }) {
     <img
       src={`/images/icons/${slug}`}
       alt={alt}
+      width="40"
+      height="40"
       className="w-10 h-10 mb-4 object-contain"
+      loading="lazy"
+      decoding="async"
       onError={() => setFailed(true)}
     />
   );

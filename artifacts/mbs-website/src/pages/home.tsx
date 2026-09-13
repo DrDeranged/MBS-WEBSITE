@@ -5,7 +5,6 @@ import {
 } from "framer-motion";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { CountUp } from "@/components/motion/CountUp";
 import { Reveal } from "@/components/motion/Reveal";
 import { GradientBand } from "@/components/motion/GradientBand";
 import { NoiseOverlay } from "@/components/motion/NoiseOverlay";
@@ -277,7 +276,7 @@ function IndustryMarquee() {
           <span key={i} className="inline-flex items-center gap-5 px-5">
             <span
               className="font-sans font-medium text-xs uppercase tracking-[0.1em]"
-              style={{ color: "rgba(255,255,255,0.22)" }}
+              style={{ color: "rgba(255,255,255,0.72)" }}
             >
               {name}
             </span>
@@ -664,32 +663,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── B) TRUST STRIP (dark) ──────────────────────────────────────────── */}
+      {/* ── B) THE MBS WAY ──────────────────────────────────────────────────── */}
       <section
+        aria-labelledby="mbs-way-heading"
         className="py-12"
         style={{
-          backgroundColor: NAVY,
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          backgroundColor: "#F5F8FB",
+          borderBottom: "1px solid #DCE4EC",
         }}
       >
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid grid-cols-3 gap-6 sm:gap-8 divide-x divide-white/10">
+          <h2
+            id="mbs-way-heading"
+            className="font-heading font-bold text-2xl md:text-3xl mb-8 text-foreground"
+          >
+            The MBS way
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8 md:gap-10">
             {[
-              { value: "6", label: "funding products" },
-              { value: "1", label: "application" },
-              { value: "24hr", label: "typical response" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center px-4 sm:px-8">
-                <p className="font-heading font-bold text-3xl md:text-4xl tabular-nums text-white mb-1">
-                  <CountUp value={stat.value} />
-                </p>
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-widest"
-                  style={{ color: "rgba(255,255,255,0.42)" }}
-                >
-                  {stat.label}
-                </p>
-              </div>
+              {
+                lead: "One application",
+                copy: "Apply once. We shop your deal across our lender network.",
+              },
+              {
+                lead: "Real lender criteria",
+                copy: "Your application is matched against each funder's actual credit requirements — not blasted everywhere.",
+              },
+              {
+                lead: "A person on your deal",
+                copy: "A dedicated rep works your file from application to funding.",
+              },
+            ].map((item) => (
+              <Reveal key={item.lead}>
+                <div className="flex gap-3">
+                  <span
+                    className="mt-1.5 h-2.5 w-2.5 flex-none"
+                    style={{ backgroundColor: GREEN }}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <h3 className="font-heading font-semibold text-base text-foreground mb-1">
+                      {item.lead}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-[#46586C]">{item.copy}</p>
+                  </div>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -802,42 +821,8 @@ export default function Home() {
             </h2>
           </Reveal>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-3">
-            {/* Stats cell — spans 2 rows on desktop */}
-            <Reveal delay={0}>
-              <div
-                className="col-span-2 lg:col-span-1 lg:row-span-2 rounded-2xl p-8 flex flex-col justify-center h-full"
-                style={{ backgroundColor: NAVY }}
-              >
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-widest mb-8"
-                  style={{ color: "rgba(255,255,255,0.33)" }}
-                >
-                  By the numbers
-                </p>
-                <div className="grid grid-cols-3 lg:grid-cols-1 gap-6 lg:gap-8">
-                  {[
-                    { value: "6", label: "funding products" },
-                    { value: "1", label: "application" },
-                    { value: "24hr", label: "typical response" },
-                  ].map((stat) => (
-                    <div key={stat.label} className="text-center lg:text-left">
-                      <p className="font-heading font-bold text-3xl lg:text-4xl tabular-nums text-white mb-1">
-                        <CountUp value={stat.value} />
-                      </p>
-                      <p
-                        className="text-[11px] font-medium uppercase tracking-wider"
-                        style={{ color: "rgba(255,255,255,0.42)" }}
-                      >
-                        {stat.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-
-            {/* 4 why-us cells — go-green square marker */}
+          <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
+            {/* Why-us cells — go-green square marker */}
             {WHY_US.map((item, i) => (
               <Reveal key={item.title} delay={80 + i * 60}>
                 <div

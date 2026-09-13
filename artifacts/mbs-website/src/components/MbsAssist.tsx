@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useLocation } from "wouter";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Role = "user" | "assistant";
@@ -9,6 +10,7 @@ interface Msg {
   content: string;
   streaming?: boolean;
   error?: boolean;
+  retryText?: string;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -48,14 +50,22 @@ async function streamAssist(
     return;
   }
 
-  const reader = resp.body!.getReader();
+  if (!resp.body) {
+    onError("The server returned an empty response. Please try again.");
+    return;
+  }
+
+  const reader = resp.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
 
   try {
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        onError("The server returned an empty response. Please try again.");
+        return;
+      }
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split("\n");
       buffer = lines.pop() ?? "";
@@ -85,9 +95,10 @@ async function streamAssist(
 }
 
 // ── MbsAssist widget ──────────────────────────────────────────────────────────
-export function MbsAssist() {
+export function MbsAssist({ initialOpen = false }: { initialOpen?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
-  const [open, setOpen] = useState(false);
+  const [location] = useLocation();
+  const [open, setOpen] = useState(initialOpen);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -112,12 +123,16 @@ export function MbsAssist() {
   }, []);
 
   const send = useCallback(
-    async (text: string) => {
+    async (text: string, retryAssistantId?: string) => {
       const trimmed = text.trim();
       if (!trimmed || busy) return;
       setInput("");
       setBusy(true);
-      addUserMsg(trimmed);
+      if (retryAssistantId) {
+        setMessages((prev) => prev.filter((message) => message.id !== retryAssistantId));
+      } else {
+        addUserMsg(trimmed);
+      }
 
       const assistantId = crypto.randomUUID();
       setMessages((prev) => [
@@ -127,9 +142,11 @@ export function MbsAssist() {
 
       // Build history for the API (only settled messages)
       const history = messages
-        .filter((m) => !m.streaming && !m.error)
+        .filter((m) => !m.streaming && !m.error && m.id !== retryAssistantId)
         .map(({ role, content }) => ({ role, content }));
-      history.push({ role: "user", content: trimmed });
+      if (!retryAssistantId) {
+        history.push({ role: "user", content: trimmed });
+      }
 
       const abort = new AbortController();
       abortRef.current = abort;
@@ -155,7 +172,7 @@ export function MbsAssist() {
           setMessages((prev) =>
             prev.map((m) =>
               m.id === assistantId
-                ? { ...m, content: errMsg, streaming: false, error: true }
+                ? { ...m, content: errMsg, streaming: false, error: true, retryText: trimmed }
                 : m,
             ),
           );
@@ -172,6 +189,20 @@ export function MbsAssist() {
       e.preventDefault();
       void send(input);
     }
+  };
+
+  const closeChat = () => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setBusy(false);
+    setMessages((prev) =>
+      prev.map((message) =>
+        message.streaming
+          ? { ...message, streaming: false, content: "Response stopped." }
+          : message,
+      ),
+    );
+    setOpen(false);
   };
 
   // Panel animation variants
@@ -201,8 +232,8 @@ export function MbsAssist() {
             whileHover={prefersReducedMotion ? {} : { y: -3 }}
             whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
             onClick={() => setOpen(true)}
-            aria-label="Open MbsAssist chat"
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3 font-semibold text-sm text-white select-none focus-visible:outline-none"
+            aria-label="Ask MBS — open chat"
+            className={`fixed right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3 font-semibold text-sm text-white select-none focus-visible:outline-none ${location === "/calculator" ? "bottom-24" : "bottom-6"}`}
             style={{
               background: "rgba(14,42,71,0.82)",
               backdropFilter: "blur(16px)",
@@ -278,8 +309,7 @@ export function MbsAssist() {
               </div>
               <button
                 onClick={() => {
-                  abortRef.current?.abort();
-                  setOpen(false);
+                  closeChat();
                 }}
                 className="text-white/60 hover:text-white transition-colors p-1 rounded-lg"
                 aria-label="Close chat"
@@ -325,12 +355,18 @@ export function MbsAssist() {
                 m.role === "user" ? (
                   <UserBubble key={m.id} content={m.content} />
                 ) : (
+                  (() => {
+                    const retryText = m.retryText;
+                    return (
                   <AssistantBubble
                     key={m.id}
                     content={m.content}
                     streaming={m.streaming}
                     error={m.error}
+                    onRetry={retryText ? () => void send(retryText, m.id) : undefined}
                   />
+                    );
+                  })()
                 ),
               )}
               <div ref={bottomRef} />
@@ -351,6 +387,7 @@ export function MbsAssist() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Ask a question…"
+                  aria-label="Ask MbsAssist a question"
                   rows={1}
                   disabled={busy}
                   className="flex-1 resize-none bg-transparent text-sm outline-none placeholder:text-gray-400 max-h-28 disabled:opacity-60"
@@ -407,8 +444,7 @@ export function MbsAssist() {
             className="fixed inset-0 z-40 sm:hidden"
             style={{ background: "rgba(14,42,71,0.4)" }}
             onClick={() => {
-              abortRef.current?.abort();
-              setOpen(false);
+              closeChat();
             }}
           />
         )}
@@ -435,10 +471,12 @@ function AssistantBubble({
   content,
   streaming,
   error,
+  onRetry,
 }: {
   content: string;
   streaming?: boolean;
   error?: boolean;
+  onRetry?: () => void;
 }) {
   return (
     <div className="flex justify-start">
@@ -455,6 +493,15 @@ function AssistantBubble({
       >
         {content || (streaming && <TypingIndicator />)}
         {streaming && content && <BlinkingCursor />}
+        {error && onRetry && (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-2 min-h-11 rounded-lg border border-red-300 px-3 py-2 text-xs font-semibold text-red-800 hover:bg-red-50"
+          >
+            Retry
+          </button>
+        )}
       </div>
     </div>
   );

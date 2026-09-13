@@ -28,7 +28,8 @@ function Segmented<T extends string>({
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-150 focus:outline-none ${
+          aria-pressed={value === o.value}
+          className={`min-h-11 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-150 focus:outline-none ${
             value === o.value
               ? "bg-white text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"
@@ -48,17 +49,20 @@ function CalcSlider({
   step,
   value,
   onChange,
+  label,
 }: {
   min: number;
   max: number;
   step: number;
   value: number;
   onChange: (n: number) => void;
+  label: string;
 }) {
   const pct = ((value - min) / (max - min)) * 100;
   return (
     <input
       type="range"
+      aria-label={label}
       min={min}
       max={max}
       step={step}
@@ -95,7 +99,8 @@ function RateBandButtons({
             key={b.apr}
             type="button"
             onClick={() => onSelect(active ? null : b.apr)}
-            className={`rounded-xl border px-3 py-3 text-left transition-all duration-150 focus:outline-none ${
+            aria-pressed={active}
+            className={`min-h-11 rounded-xl border px-3 py-3 text-left transition-all duration-150 focus:outline-none ${
               active
                 ? "border-accent bg-accent/5"
                 : "border-border hover:border-primary/40"
@@ -103,14 +108,14 @@ function RateBandButtons({
           >
             <p
               className={`text-sm font-semibold mb-0.5 transition-colors duration-150 ${
-                active ? "text-accent" : "text-foreground"
+                active ? "text-[#0E7A4A]" : "text-foreground"
               }`}
             >
               {b.label}
             </p>
             <p
               className={`text-xs font-medium tabular-nums transition-all duration-200 ${
-                active ? "text-accent/80" : "text-muted-foreground"
+                active ? "text-[#0E7A4A]" : "text-muted-foreground"
               }`}
             >
               {b.est}
@@ -230,46 +235,44 @@ function MobileBar({
       className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border shadow-[0_-4px_16px_rgba(14,42,71,0.08)]"
       style={{ borderRadius: "16px 16px 0 0" }}
     >
-      <button
-        type="button"
-        className="w-full flex items-center justify-between px-5 py-4"
-        onClick={() => setExpanded((e) => !e)}
-        aria-expanded={expanded}
-        aria-label="Toggle payment summary"
-      >
-        <div className="text-left">
-          <p className="text-xs text-muted-foreground">
-            Est. {frequency.toLowerCase()} payment
-          </p>
-          <p
-            key={animKey}
-            className="digit-roll tabular-nums font-heading font-bold text-2xl"
-            style={{ color: "#1F4E79" }}
-          >
-            {fmtDollar(result.payment)}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <a
-            href="https://app.my-business-solutions.com/apply"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="btn-primary text-sm px-5"
-            style={{}}
-          >
-            Apply
-          </a>
+      <div className="flex items-center gap-3 px-5 py-4">
+        <button
+          type="button"
+          className="flex min-h-12 flex-1 items-center justify-between rounded-lg text-left"
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+        >
+          <span>
+            <span className="block text-xs text-muted-foreground">
+              Est. {frequency.toLowerCase()} payment
+            </span>
+            <span
+              key={animKey}
+              className="digit-roll block tabular-nums font-heading font-bold text-2xl"
+              style={{ color: "#1F4E79" }}
+            >
+              {fmtDollar(result.payment)}
+            </span>
+          </span>
           <svg
-            className={`w-5 h-5 text-muted-foreground transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+            className={`mr-1 h-5 w-5 text-muted-foreground transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-        </div>
-      </button>
+        </button>
+        <a
+          href="https://app.my-business-solutions.com/apply"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary min-h-12 text-sm px-5"
+        >
+          Apply
+        </a>
+      </div>
 
       {/* Expanded detail */}
       {expanded && (
@@ -444,6 +447,8 @@ export default function Calculator() {
                       $
                     </span>
                     <input
+                      id="funding-amount"
+                      aria-label="Funding amount"
                       type="text"
                       inputMode="numeric"
                       value={inputVal}
@@ -454,6 +459,7 @@ export default function Calculator() {
                   </div>
                 </div>
                 <CalcSlider
+                  label="Funding amount"
                   min={10_000}
                   max={500_000}
                   step={5_000}
@@ -475,6 +481,7 @@ export default function Calculator() {
                   </span>
                 </div>
                 <CalcSlider
+                  label="Term length in months"
                   min={3}
                   max={60}
                   step={1}
@@ -513,6 +520,7 @@ export default function Calculator() {
                       </span>
                     </div>
                     <CalcSlider
+                      label="Exact APR"
                       min={8}
                       max={60}
                       step={0.5}

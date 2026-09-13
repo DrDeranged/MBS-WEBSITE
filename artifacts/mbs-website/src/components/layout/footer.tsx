@@ -1,8 +1,8 @@
 import { Link } from "wouter";
 
 export function Footer() {
-  const quickLinks = [
-    { href: "/", label: "Home" },
+  const quickLinks: { href: string; label: string; external?: boolean }[] = [
+    { href: "https://app.my-business-solutions.com/apply", label: "Funding options", external: true },
     { href: "/calculator", label: "Calculator" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
@@ -17,9 +17,11 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6">
               <div className="bg-white px-3 py-2 rounded-xl inline-flex">
                 <img
-                  src="/images/mbs-logo-footer.png"
+                  src="/images/mbs-logo.png"
                   alt="My Business Solutions"
-                  className="h-10 object-contain"
+                  width="228"
+                  height="64"
+                  className="h-7 w-auto object-contain"
                 />
               </div>
             </Link>
@@ -29,15 +31,26 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-6 text-white">
+            <h2 className="font-heading font-semibold text-lg mb-6 text-white">
               Quick Links
-            </h3>
+            </h2>
             <ul className="flex flex-col gap-4 text-cloud/80">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
               <li>
@@ -54,9 +67,9 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-heading font-semibold text-lg mb-6 text-white">
+            <h2 className="font-heading font-semibold text-lg mb-6 text-white">
               Get in Touch
-            </h3>
+            </h2>
             <ul className="flex flex-col gap-4 text-cloud/80">
               <li>Contact support or sales to find the right funding for you.</li>
               <li>

@@ -73,27 +73,28 @@ export default function Contact() {
 
     setStatus("submitting");
 
-    try {
-      const resp = await fetch(SUBMIT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          company: company.trim(),
-          email: email.trim(),
-          phone: phone.replace(/\D/g, ""),
-          message: message.trim(),
-        }),
-      });
+    const body = JSON.stringify({
+      name: name.trim(),
+      company: company.trim(),
+      email: email.trim(),
+      phone: phone.replace(/\D/g, ""),
+      message: message.trim(),
+    });
 
-      // Endpoint always returns 200 per spec
-      if (resp.ok) {
-        setStatus("success");
-      } else {
-        setStatus("error");
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      try {
+        const resp = await fetch(SUBMIT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+        });
+        setStatus(resp.ok ? "success" : "error");
+        return;
+      } catch {
+        if (attempt === 1) {
+          setStatus("error");
+        }
       }
-    } catch {
-      setStatus("error");
     }
   };
 
@@ -176,89 +177,107 @@ export default function Contact() {
 
                   <div className="grid sm:grid-cols-2 gap-5 mb-5">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                      <label htmlFor="contact-name" className="block text-sm font-medium text-foreground mb-1.5">
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="contact-name"
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Jane Smith"
                         className={inputStyle("name")}
                         autoComplete="name"
+                        aria-invalid={Boolean(errors.name)}
+                        aria-describedby={errors.name ? "contact-name-error" : undefined}
                       />
-                      {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+                      {errors.name && <p id="contact-name-error" className="mt-1 text-xs text-red-600">{errors.name}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                      <label htmlFor="contact-company" className="block text-sm font-medium text-foreground mb-1.5">
                         Business Name <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="contact-company"
                         type="text"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="Acme LLC"
                         className={inputStyle("company")}
                         autoComplete="organization"
+                        aria-invalid={Boolean(errors.company)}
+                        aria-describedby={errors.company ? "contact-company-error" : undefined}
                       />
-                      {errors.company && <p className="mt-1 text-xs text-red-500">{errors.company}</p>}
+                      {errors.company && <p id="contact-company-error" className="mt-1 text-xs text-red-600">{errors.company}</p>}
                     </div>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-5 mb-5">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                      <label htmlFor="contact-email" className="block text-sm font-medium text-foreground mb-1.5">
                         Email <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="contact-email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="jane@acme.com"
                         className={inputStyle("email")}
                         autoComplete="email"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? "contact-email-error" : undefined}
                       />
-                      {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+                      {errors.email && <p id="contact-email-error" className="mt-1 text-xs text-red-600">{errors.email}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-1.5">
+                      <label htmlFor="contact-phone" className="block text-sm font-medium text-foreground mb-1.5">
                         Phone <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="contact-phone"
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="(555) 000-0000"
                         className={inputStyle("phone")}
                         autoComplete="tel"
+                        aria-invalid={Boolean(errors.phone)}
+                        aria-describedby={errors.phone ? "contact-phone-error" : undefined}
                       />
-                      {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
+                      {errors.phone && <p id="contact-phone-error" className="mt-1 text-xs text-red-600">{errors.phone}</p>}
                     </div>
                   </div>
 
                   <div className="mb-5">
-                    <label className="block text-sm font-medium text-foreground mb-1.5">
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-foreground mb-1.5">
                       Message <span className="text-red-500">*</span>
                     </label>
                     <textarea
+                      id="contact-message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Tell us about your business and what you're looking for…"
                       rows={5}
                       className={`${inputStyle("message")} resize-none`}
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={errors.message ? "contact-message-error" : undefined}
                     />
-                    {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
+                    {errors.message && <p id="contact-message-error" className="mt-1 text-xs text-red-600">{errors.message}</p>}
                   </div>
 
                   {/* Consent checkbox */}
                   <div className="mb-8">
                     <label className="flex items-start gap-3 cursor-pointer">
                       <input
+                        id="contact-consent"
                         type="checkbox"
                         checked={consent}
                         onChange={(e) => setConsent(e.target.checked)}
                         className="mt-0.5 flex-none w-4 h-4 rounded border-border"
                         style={{ accentColor: "#17A567" }}
+                        aria-invalid={Boolean(errors.consent)}
+                        aria-describedby={errors.consent ? "contact-consent-error" : undefined}
                       />
                       <span className="text-sm text-muted-foreground leading-relaxed">
                         By contacting us, you agree to our{" "}
@@ -279,13 +298,14 @@ export default function Contact() {
                       </span>
                     </label>
                     {errors.consent && (
-                      <p className="mt-1 text-xs text-red-500 pl-7">{errors.consent}</p>
+                      <p id="contact-consent-error" className="mt-1 text-xs text-red-600 pl-7">{errors.consent}</p>
                     )}
                   </div>
 
                   {status === "error" && (
                     <div
                       className="mb-5 rounded-xl px-4 py-3 text-sm"
+                      role="alert"
                       style={{ backgroundColor: "#FEF2F2", color: "#B91C1C", border: "1px solid #FECACA" }}
                     >
                       Something went wrong. Please check your connection and try again.
