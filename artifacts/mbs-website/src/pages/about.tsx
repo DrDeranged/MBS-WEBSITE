@@ -4,8 +4,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeading } from "@/components/motion/SectionHeading";
 import { GradientBand } from "@/components/motion/GradientBand";
-
-const APPLY_URL = "https://app.my-business-solutions.com/apply";
+import { buildApplyUrl } from "@/lib/applyUrl";
 
 // ── Step icon with fallback ───────────────────────────────────────────────────
 function StepIcon({ slug, alt }: { slug: string; alt: string }) {
@@ -203,7 +202,7 @@ export default function About() {
       <GradientBand
         heading="Ready to explore your options?"
         ctaLabel="Apply now — it takes minutes"
-        ctaHref={APPLY_URL}
+        ctaHref={buildApplyUrl("cta-band")}
       />
     </Layout>
   );

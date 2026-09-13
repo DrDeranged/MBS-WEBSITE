@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
+import { buildApplyUrl } from "@/lib/applyUrl";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -131,12 +132,14 @@ function RateBandButtons({
 function ResultsCard({
   result,
   principal,
+  termMonths,
   frequency,
   pulsing,
   animKey,
 }: {
   result: ReturnType<typeof calcPayment>;
   principal: number;
+  termMonths: number;
   frequency: Frequency;
   pulsing: boolean;
   animKey: number;
@@ -208,7 +211,11 @@ function ResultsCard({
 
       {/* CTA */}
       <a
-        href="https://app.my-business-solutions.com/apply"
+        href={buildApplyUrl("calculator", {
+          amount: principal,
+          term: termMonths,
+          freq: frequency,
+        })}
         target="_blank"
         rel="noopener noreferrer"
         className="btn-primary w-full text-base"
@@ -222,10 +229,14 @@ function ResultsCard({
 // ── Mobile bottom summary bar ─────────────────────────────────────────────────
 function MobileBar({
   result,
+  principal,
+  termMonths,
   frequency,
   animKey,
 }: {
   result: ReturnType<typeof calcPayment>;
+  principal: number;
+  termMonths: number;
   frequency: Frequency;
   animKey: number;
 }) {
@@ -265,7 +276,11 @@ function MobileBar({
           </svg>
         </button>
         <a
-          href="https://app.my-business-solutions.com/apply"
+          href={buildApplyUrl("calculator", {
+            amount: principal,
+            term: termMonths,
+            freq: frequency,
+          })}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary min-h-12 text-sm px-5"
@@ -553,6 +568,7 @@ export default function Calculator() {
               <ResultsCard
                 result={result}
                 principal={principal}
+                termMonths={termMonths}
                 frequency={frequency}
                 pulsing={pulsing}
                 animKey={animKey}
@@ -563,7 +579,13 @@ export default function Calculator() {
       </section>
 
       {/* Mobile bottom-pinned bar */}
-      <MobileBar result={result} frequency={frequency} animKey={animKey} />
+      <MobileBar
+        result={result}
+        principal={principal}
+        termMonths={termMonths}
+        frequency={frequency}
+        animKey={animKey}
+      />
     </Layout>
   );
 }

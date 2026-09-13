@@ -3,14 +3,15 @@ import { Link } from "wouter";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Reveal } from "@/components/motion/Reveal";
-import { POSTS, APPLY_URL } from "@/content/blog";
+import { POSTS } from "@/content/blog";
+import { buildApplyUrl } from "@/lib/applyUrl";
 
 interface Props {
   params: { slug: string };
 }
 
 // ── Inline markdown renderer (bold + links) ───────────────────────────────────
-function renderInline(text: string): (string | ReactElement)[] {
+function renderInline(text: string, applyUrl: string): (string | ReactElement)[] {
   const parts: (string | ReactElement)[] = [];
   let remaining = text;
   let key = 0;
@@ -23,7 +24,11 @@ function renderInline(text: string): (string | ReactElement)[] {
       parts.push(
         <a
           key={key++}
-          href={linkMatch[3]}
+          href={
+            linkMatch[3] === "apply"
+              ? applyUrl
+              : linkMatch[3]
+          }
           target={linkMatch[3].startsWith("http") ? "_blank" : undefined}
           rel={linkMatch[3].startsWith("http") ? "noopener noreferrer" : undefined}
           className="underline font-medium transition-colors"
@@ -52,7 +57,7 @@ function renderInline(text: string): (string | ReactElement)[] {
 // ── Full markdown block renderer ──────────────────────────────────────────────
 // Handles: # h1 (skipped — title is in the header), ## h2, ### h3,
 // regular paragraphs, **bold**, [link](url)
-function renderMarkdown(raw: string): ReactElement[] {
+function renderMarkdown(raw: string, applyUrl: string): ReactElement[] {
   const blocks = raw.split(/\n\n+/).map((b) => b.trim()).filter(Boolean);
 
   return blocks
@@ -87,7 +92,7 @@ function renderMarkdown(raw: string): ReactElement[] {
       // Regular paragraph
       return (
         <p key={bi} className="text-muted-foreground leading-[1.8] mb-0">
-          {renderInline(block)}
+          {renderInline(block, applyUrl)}
         </p>
       );
     })
@@ -116,6 +121,8 @@ export default function BlogArticle({ params }: Props) {
       </Layout>
     );
   }
+
+  const applyUrl = buildApplyUrl(`blog-${post.slug}`);
 
   return (
     <Layout>
@@ -168,7 +175,7 @@ export default function BlogArticle({ params }: Props) {
           {/* Markdown body */}
           <Reveal delay={60}>
             <div className="space-y-6">
-              {renderMarkdown(post.body)}
+              {renderMarkdown(post.body, applyUrl)}
             </div>
           </Reveal>
 
@@ -185,7 +192,7 @@ export default function BlogArticle({ params }: Props) {
                 One application. Multiple lenders. Real offers — no obligation.
               </p>
               <a
-                href={APPLY_URL}
+                href={applyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"

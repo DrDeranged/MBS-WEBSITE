@@ -9,8 +9,8 @@ import { Reveal } from "@/components/motion/Reveal";
 import { GradientBand } from "@/components/motion/GradientBand";
 import { NoiseOverlay } from "@/components/motion/NoiseOverlay";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
+import { buildApplyUrl } from "@/lib/applyUrl";
 
-const APPLY_URL = "https://app.my-business-solutions.com/apply";
 const INK = "#0E2A47";
 const NAVY = "#1F4E79";
 const GREEN = "#17A567";
@@ -511,7 +511,7 @@ function MiniCalc() {
           </svg>
         </a>
         <a
-          href={APPLY_URL}
+          href={buildApplyUrl("mini-calc")}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary text-sm"
@@ -639,7 +639,7 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
-                  href={APPLY_URL}
+                  href={buildApplyUrl("hero")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary text-base px-8"
@@ -784,7 +784,7 @@ export default function Home() {
           <Reveal delay={240}>
             <div className="mt-14 text-center">
               <a
-                href={APPLY_URL}
+                href={buildApplyUrl("products")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.40)]"
@@ -884,7 +884,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a
-                  href={APPLY_URL}
+                  href={buildApplyUrl("mini-calc")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.40)]"
@@ -911,7 +911,7 @@ export default function Home() {
       <GradientBand
         heading="Ready to see your options?"
         ctaLabel="Apply now — it takes minutes"
-        ctaHref={APPLY_URL}
+        ctaHref={buildApplyUrl("cta-band")}
       />
     </Layout>
   );

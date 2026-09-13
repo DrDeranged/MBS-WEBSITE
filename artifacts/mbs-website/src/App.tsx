@@ -11,6 +11,7 @@ import {
 } from 'wouter';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { MbsAssistLauncher } from '@/components/MbsAssistLauncher';
+import { buildApplyUrl } from '@/lib/applyUrl';
 
 import Home from '@/pages/home';
 const Calculator = lazy(() => import('@/pages/calculator'));
@@ -90,7 +91,7 @@ function Router() {
             <Route path="/terms-of-service" component={TermsOfService} />
             {/* Legacy WordPress route → external apply URL */}
             <Route path="/get-started">
-              {() => <ExternalRedirect to="https://app.my-business-solutions.com/apply" />}
+              {() => <ExternalRedirect to={buildApplyUrl("get-started-redirect")} />}
             </Route>
             <Route component={NotFound} />
           </Switch>

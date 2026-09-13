@@ -1,8 +1,9 @@
 import { Link } from "wouter";
+import { buildApplyUrl } from "@/lib/applyUrl";
 
 export function Footer() {
   const quickLinks: { href: string; label: string; external?: boolean }[] = [
-    { href: "https://app.my-business-solutions.com/apply", label: "Funding options", external: true },
+    { href: buildApplyUrl("products"), label: "Funding options", external: true },
     { href: "/calculator", label: "Calculator" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
@@ -55,12 +56,22 @@ export function Footer() {
               ))}
               <li>
                 <a 
-                  href="https://app.my-business-solutions.com/apply"
+                  href={buildApplyUrl("cta-band")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors text-accent font-medium"
                 >
                   Apply Now
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://app.my-business-solutions.com/apply/status"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Check application status
                 </a>
               </li>
             </ul>

@@ -14,9 +14,6 @@ export interface BlogPost {
   sections: { heading?: string; body: string }[];
 }
 
-const APPLY_URL = "https://app.my-business-solutions.com/apply";
-export { APPLY_URL };
-
 export const POSTS: BlogPost[] = [
   {
     slug: "working-capital-vs-term-loans",

@@ -38,4 +38,4 @@ Download complete statements directly from your bank and make sure the business 
 
 Organized statements can make the review more efficient and help a lender understand the real business behind the numbers. When you are ready, MBS can help you explore funding options that fit your business profile.
 
-[Apply through MBS when you're ready](https://app.my-business-solutions.com/apply)
+[Apply through MBS when you're ready](apply)

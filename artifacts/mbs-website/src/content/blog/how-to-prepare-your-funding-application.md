@@ -40,4 +40,4 @@ If you receive funding options, read beyond the approved amount. Review the paym
 
 MBS can help you start that comparison through a single application across a range of funding options. Preparing carefully gives lenders a clearer picture and gives you a stronger basis for deciding what fits.
 
-[Start your application now](https://app.my-business-solutions.com/apply)
+[Start your application now](apply)

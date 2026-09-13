@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useEffect, useState, useRef } from "react";
 import { Menu, X } from "lucide-react";
+import { buildApplyUrl } from "@/lib/applyUrl";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -83,7 +84,7 @@ export function Header() {
               </Link>
             ))}
             <a
-              href="https://app.my-business-solutions.com/apply"
+              href={buildApplyUrl("header")}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary text-sm px-6"
@@ -163,7 +164,7 @@ export function Header() {
 
         <div className="mt-auto p-6 border-t border-white/10">
           <a
-            href="https://app.my-business-solutions.com/apply"
+            href={buildApplyUrl("header")}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary w-full text-base px-6"

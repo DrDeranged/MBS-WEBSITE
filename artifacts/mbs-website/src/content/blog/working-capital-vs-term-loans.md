@@ -32,4 +32,4 @@ Gather recent business bank statements, a simple view of revenue and expenses, a
 
 You do not have to make the choice alone before applying. MBS can help you explore working capital products, term loans, lines of credit, and other options in one place. Compare the actual structure, total cost, repayment schedule, and flexibility of each offer before deciding.
 
-[Apply now and see your options](https://app.my-business-solutions.com/apply)
+[Apply now and see your options](apply)

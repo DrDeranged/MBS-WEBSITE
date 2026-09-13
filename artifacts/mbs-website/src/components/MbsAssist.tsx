@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLocation } from "wouter";
+import { buildApplyUrl, type ApplySource } from "@/lib/applyUrl";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Role = "user" | "assistant";
@@ -14,7 +15,6 @@ interface Msg {
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const APPLY_URL = "https://app.my-business-solutions.com/apply";
 const STARTER_CHIPS = [
   "What do I need to apply?",
   "Which funding fits me?",
@@ -98,6 +98,13 @@ async function streamAssist(
 export function MbsAssist({ initialOpen = false }: { initialOpen?: boolean }) {
   const prefersReducedMotion = useReducedMotion();
   const [location] = useLocation();
+  const applySource: ApplySource = location.startsWith("/blog/")
+    ? `blog-${location.slice("/blog/".length)}`
+    : location === "/calculator"
+      ? "calculator"
+      : location === "/contact"
+        ? "contact-page"
+        : "cta-band";
   const [open, setOpen] = useState(initialOpen);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -415,7 +422,7 @@ export function MbsAssist({ initialOpen = false }: { initialOpen?: boolean }) {
               {/* Footer: Apply Now */}
               <div className="flex justify-center pt-2 pb-1">
                 <a
-                  href={APPLY_URL}
+                  href={buildApplyUrl(applySource)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
