@@ -1,0 +1,58 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "cYyQm80SQU45fcReBcZUm"
+uri = "file://screenshots/about-desktop.jpg"
+type = "image"
+title = "About — desktop"
+description = "Desktop verification of the approved About manifesto motion hero."
+logical_id = "842626b2-abff-4c9d-85f9-c1b68408eb84"
+content_hash = "sha256:fdfe57267685fe9b7d9a5793da052ddfd5fd97f9387914dec10b8a6e5d05fa5c"
+size = 69057
+mtime_ms = 1789333816380
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:3103995b-9e29-4167-aa0a-7f15361b4382/842626b2-abff-4c9d-85f9-c1b68408eb84/db97ff27-94c4-449a-bb20-77221531afe5"
+storage_version_token = "1789334236903460"
+content_type = "image/jpeg"
+
+[[outputs]]
+id = "0d5_BHRdS6fPdopzZJ1nR"
+uri = "file://screenshots/about-mobile.jpg"
+type = "image"
+title = "About — 390px mobile"
+description = "Mobile verification of the approved About manifesto motion hero."
+logical_id = "7e8177ad-0518-479f-be74-dc5c2428f3e5"
+content_hash = "sha256:b54d44f9c3b89b0a13ffeafa5230d195e37182e8a4abd0776874b4627f9177db"
+size = 29071
+mtime_ms = 1789333818784
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:3103995b-9e29-4167-aa0a-7f15361b4382/7e8177ad-0518-479f-be74-dc5c2428f3e5/dd35f06f-a8a6-4c7a-8906-fbaf0b1d58cf"
+storage_version_token = "1789334237435200"
+content_type = "image/jpeg"
+
+[[outputs]]
+id = "_EegbC3NEQ3bfZ8I-II1F"
+uri = "file://screenshots/products-motion-hero.jpg"
+type = "image"
+title = "Products motion hero"
+description = "Desktop verification of the new Products page and machinery motion surface."
+logical_id = "fdda87da-f880-4ee9-b264-f0af17276237"
+content_hash = "sha256:6b4e02cbb749830a94ddbba08576cf4c68084b65e5dd3f9e098611bd76632936"
+size = 69552
+mtime_ms = 1789333821328
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:3103995b-9e29-4167-aa0a-7f15361b4382/fdda87da-f880-4ee9-b264-f0af17276237/72ada06d-aa58-40d9-a707-292a026f2fd4"
+storage_version_token = "1789334238064065"
+content_type = "image/jpeg"
+
+[[outputs]]
+id = "kIUUMgxDlt4lvJCszGisc"
+uri = "file://screenshots/home-motion-band.jpg"
+type = "image"
+title = "Home logistics motion band"
+description = "390px verification of the lazy-loaded Home CTA motion surface."
+logical_id = "40f254c9-5dc1-45a6-88cd-347fffbecee0"
+content_hash = "sha256:f49c0c062ac39d3845ac6f224184afc53a7d05104c00e757df82b5f15d9f69e9"
+size = 170368
+mtime_ms = 1789333870406
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:3103995b-9e29-4167-aa0a-7f15361b4382/40f254c9-5dc1-45a6-88cd-347fffbecee0/7c984e21-ff0c-49db-a777-f1c6e8cac1e8"
+storage_version_token = "1789334238779774"
+content_type = "image/jpeg"
