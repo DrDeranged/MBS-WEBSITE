@@ -3,7 +3,7 @@ import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Reveal } from "@/components/motion/Reveal";
-import { GradientBand } from "@/components/motion/GradientBand";
+import { CinematicVideo } from "@/components/motion/CinematicVideo";
 import { NoiseOverlay } from "@/components/motion/NoiseOverlay";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
 import { buildApplyUrl } from "@/lib/applyUrl";
@@ -563,12 +563,27 @@ export default function Home() {
   );
 
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-  useAutoplayVideo(heroVideoRef);
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const [heroInView, setHeroInView] = useState(true);
+  const prefersReducedMotion = useReducedMotionPreference();
+  useAutoplayVideo(heroVideoRef, heroInView && !prefersReducedMotion);
+
+  useEffect(() => {
+    const section = heroSectionRef.current;
+    if (!section || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroInView(entry.isIntersecting),
+      { threshold: 0.05 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Layout mainClassName="flex-1">
       {/* ── A) CINEMATIC HERO ──────────────────────────────────────────────── */}
       <section
+        ref={heroSectionRef}
         className="relative overflow-hidden flex flex-col justify-center"
         style={{ minHeight: "100dvh", paddingTop: "96px", paddingBottom: "72px" }}
       >
@@ -584,8 +599,12 @@ export default function Home() {
           preload="metadata"
           aria-hidden="true"
         >
-          <source src="/videos/hero-band.mp4" type="video/mp4" />
-          <source src="/videos/hero-band.webm" type="video/webm" />
+          {!prefersReducedMotion && (
+            <>
+              <source src="/videos/hero-band.mp4" type="video/mp4" />
+              <source src="/videos/hero-band.webm" type="video/webm" />
+            </>
+          )}
         </video>
 
         {/* Ink gradient overlay — 85 % left (copy) → 40 % right (glass panel) */}
@@ -919,12 +938,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── G) GRADIENT BAND CTA — flat edge (light→dark, no diagonal per spec) */}
-      <GradientBand
-        heading="Ready to see your options?"
-        ctaLabel="Apply now — it takes minutes"
-        ctaHref={buildApplyUrl("cta-band")}
-      />
+      {/* ── G) CINEMATIC CTA BAND — lazy below the fold */}
+      <CinematicVideo
+        src="/videos/home-logistics.mp4"
+        poster="/videos/home-logistics-poster.jpg"
+        ariaLabel="Explore business funding options"
+        className="min-h-[420px] flex items-center"
+        overlay="linear-gradient(100deg, rgba(8,25,43,0.94), rgba(14,42,71,0.68))"
+      >
+        <div className="mx-auto max-w-6xl px-6 py-24 text-center">
+          <Reveal>
+            <h2 className="font-heading text-4xl font-bold text-white md:text-6xl">
+              Ready to see your options?
+            </h2>
+            <a
+              href={buildApplyUrl("cta-band")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary mt-8 px-8"
+            >
+              Apply now — it takes minutes
+            </a>
+          </Reveal>
+        </div>
+      </CinematicVideo>
     </Layout>
   );
 }

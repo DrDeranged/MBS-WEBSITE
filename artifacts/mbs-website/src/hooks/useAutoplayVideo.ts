@@ -1,11 +1,22 @@
 import { type RefObject, useEffect } from "react";
 
-export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
+export function useAutoplayVideo(
+  ref: RefObject<HTMLVideoElement | null>,
+  enabled = true,
+) {
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
 
     let retryAttached = false;
+    video.defaultMuted = true;
+    video.muted = true;
+    video.setAttribute("muted", "");
+
+    if (!enabled) {
+      video.pause();
+      return;
+    }
 
     const retryPlayback = () => {
       retryAttached = false;
@@ -19,9 +30,6 @@ export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
     };
 
     const playWhenAllowed = () => {
-      video.defaultMuted = true;
-      video.muted = true;
-      video.setAttribute("muted", "");
       if (
         document.visibilityState !== "visible"
       ) {
@@ -56,5 +64,5 @@ export function useAutoplayVideo(ref: RefObject<HTMLVideoElement | null>) {
       video.removeEventListener("canplay", retryPlayback);
       video.pause();
     };
-  }, [ref]);
+  }, [enabled, ref]);
 }

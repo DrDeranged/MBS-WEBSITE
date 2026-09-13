@@ -25,6 +25,7 @@ const redirects = new Map([
   ["/get-started", applyRedirect],
   ["/get-started/", applyRedirect],
   ["/about/", "/about"],
+  ["/products/", "/products"],
   ["/calculator/", "/calculator"],
   ["/contact/", "/contact"],
   ["/blog/", "/blog"],
@@ -86,9 +87,17 @@ const pageMetadata = new Map([
   [
     "/about",
     {
-      title: "About Us | My Business Solutions",
+      title: "Our Story | My Business Solutions",
       description:
-        "We help businesses navigate the funding process with clarity and confidence, making it easier to explore financing options in one place.",
+        "One desk. More ways to get it done. Learn why MBS was built and meet founder and CEO Nate Ford.",
+    },
+  ],
+  [
+    "/products",
+    {
+      title: "Business Financing Products | My Business Solutions",
+      description:
+        "Explore term loans, lines of credit, revenue-based financing, equipment financing, SBA loans, and invoice factoring.",
     },
   ],
   [

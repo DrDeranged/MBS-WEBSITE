@@ -3,9 +3,9 @@ import { buildApplyUrl } from "@/lib/applyUrl";
 
 export function Footer() {
   const quickLinks: { href: string; label: string; external?: boolean }[] = [
-    { href: buildApplyUrl("products"), label: "Funding options", external: true },
+    { href: "/products", label: "Products" },
     { href: "/calculator", label: "Calculator" },
-    { href: "/about", label: "About" },
+    { href: "/about", label: "Our Story" },
     { href: "/contact", label: "Contact" },
     { href: "/blog", label: "Blog" },
   ];

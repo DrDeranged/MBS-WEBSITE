@@ -6,7 +6,8 @@ import { buildApplyUrl } from "@/lib/applyUrl";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/calculator", label: "Calculator" },
-  { href: "/about", label: "About" },
+  { href: "/products", label: "Products" },
+  { href: "/about", label: "Our Story" },
   { href: "/contact", label: "Contact" },
   { href: "/blog", label: "Blog" },
 ];

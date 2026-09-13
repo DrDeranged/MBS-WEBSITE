@@ -12,6 +12,7 @@ import { buildApplyUrl } from '@/lib/applyUrl';
 import Home from '@/pages/home';
 const Calculator = lazy(() => import('@/pages/calculator'));
 const About = lazy(() => import('@/pages/about'));
+const Products = lazy(() => import('@/pages/products'));
 const Contact = lazy(() => import('@/pages/contact'));
 const Blog = lazy(() => import('@/pages/blog'));
 const BlogArticle = lazy(() => import('@/pages/blog-article'));
@@ -59,6 +60,7 @@ function Router() {
             <Route path="/" component={Home} />
             <Route path="/calculator" component={Calculator} />
             <Route path="/about" component={About} />
+            <Route path="/products" component={Products} />
             <Route path="/contact" component={Contact} />
             <Route path="/blog" component={Blog} />
             <Route path="/blog/:slug" component={BlogArticle} />

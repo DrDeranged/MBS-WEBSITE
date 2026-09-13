@@ -9,6 +9,7 @@ export type ApplySource =
   | "calculator"
   | `blog-${string}`
   | "contact-page"
+  | "about-page"
   | "get-started-redirect";
 
 type ApplyPrefill = {
