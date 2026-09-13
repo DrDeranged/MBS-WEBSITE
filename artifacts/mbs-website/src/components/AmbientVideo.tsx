@@ -1,4 +1,5 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
+import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 interface AmbientVideoProps {
   /** Heading overlaid on the band */
@@ -22,34 +23,7 @@ export function AmbientVideo({
   className = "",
 }: AmbientVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    // iOS Safari requires the muted property set imperatively — the JSX
-    // attribute alone is not honoured before the play() call.
-    video.muted = true;
-
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      video.pause();
-    } else {
-      video.play().catch(() => {
-        // iOS rejects play() before any bytes arrive even with preload="metadata".
-        // Retry once when the browser signals it has enough data to begin.
-        const retry = () => {
-          video.play().catch(() => {/* autoplay truly blocked — poster stays */});
-        };
-        video.addEventListener("canplay", retry, { once: true });
-      });
-    }
-    const onChange = (e: MediaQueryListEvent) => {
-      if (e.matches) video.pause();
-      else video.play().catch(() => {});
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+  useAutoplayVideo(videoRef);
 
   return (
     <section
@@ -62,6 +36,7 @@ export function AmbientVideo({
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover"
         poster="/videos/hero-band-poster.jpg"
+        autoPlay
         muted
         loop
         playsInline

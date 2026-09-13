@@ -3,6 +3,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
 import { buildApplyUrl } from "@/lib/applyUrl";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useReducedMotion } from "framer-motion";
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 function fmt(n: number) {
@@ -348,6 +349,7 @@ const FREQ_OPTIONS: { value: Frequency; label: string }[] = [
 const DEFAULT_BAND_APR = 24;
 
 export default function Calculator() {
+  const shouldReduceMotion = useReducedMotion();
   usePageMeta(
     "Business Funding Calculator | My Business Solutions",
     "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
@@ -395,16 +397,27 @@ export default function Calculator() {
   const prevPayment             = useRef<number | null>(null);
 
   useEffect(() => {
+    let animationFrame = 0;
+    let pulseTimer = 0;
+
     if (prevPayment.current !== null && prevPayment.current !== result.payment) {
-      setPulsing(false);
-      requestAnimationFrame(() => {
-        setPulsing(true);
-        setAnimKey((k) => k + 1);
-        setTimeout(() => setPulsing(false), 600);
-      });
+      if (shouldReduceMotion) {
+        setPulsing(false);
+      } else {
+        setPulsing(false);
+        animationFrame = requestAnimationFrame(() => {
+          setPulsing(true);
+          setAnimKey((k) => k + 1);
+          pulseTimer = window.setTimeout(() => setPulsing(false), 600);
+        });
+      }
     }
     prevPayment.current = result.payment;
-  }, [result.payment]);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      clearTimeout(pulseTimer);
+    };
+  }, [result.payment, shouldReduceMotion]);
 
   // Handle rate band / advanced toggle
   const handleBandSelect = (apr: number | null) => {

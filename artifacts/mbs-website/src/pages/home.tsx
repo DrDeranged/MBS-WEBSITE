@@ -10,6 +10,7 @@ import { GradientBand } from "@/components/motion/GradientBand";
 import { NoiseOverlay } from "@/components/motion/NoiseOverlay";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
 import { buildApplyUrl } from "@/lib/applyUrl";
+import { useAutoplayVideo } from "@/hooks/useAutoplayVideo";
 
 const INK = "#0E2A47";
 const NAVY = "#1F4E79";
@@ -92,7 +93,7 @@ function fmt(n: number) {
 function HeroMockPanel() {
   const shouldReduceMotion = useReducedMotion();
   const panelRef = useRef<HTMLDivElement>(null);
-  const isVisible = useRef(true);
+  const isVisible = useRef(false);
   const cycleRef = useRef(0);
   const amtIdxRef = useRef([0, 0, 0]);
 
@@ -107,19 +108,19 @@ function HeroMockPanel() {
   useEffect(() => {
     if (shouldReduceMotion) return;
 
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        isVisible.current = e.isIntersecting;
-      },
-      { threshold: 0.1 },
-    );
-    if (panelRef.current) obs.observe(panelRef.current);
+    const animationTimers = new Set<number>();
+    let cycleTimer = 0;
+    let pageVisible = document.visibilityState === "visible";
 
-    let t1 = 0,
-      t2 = 0;
+    const clearAnimationTimers = () => {
+      animationTimers.forEach((timer) => clearTimeout(timer));
+      animationTimers.clear();
+      setRollingIdx(null);
+      setPillPopIdx(null);
+    };
 
-    const iv = setInterval(() => {
-      if (!isVisible.current) return;
+    const runCycle = () => {
+      if (!isVisible.current || !pageVisible) return;
 
       const cardIdx = cycleRef.current;
       cycleRef.current = (cardIdx + 1) % 3;
@@ -129,25 +130,61 @@ function HeroMockPanel() {
 
       setRollingIdx(cardIdx);
 
-      t1 = window.setTimeout(() => {
+      const amountTimer = window.setTimeout(() => {
+        animationTimers.delete(amountTimer);
         setAmounts((prev) => {
-          const n = [...prev];
-          n[cardIdx] = newAmt;
-          return n;
+          const next = [...prev];
+          next[cardIdx] = newAmt;
+          return next;
         });
         setRollingIdx(null);
         setPillPopIdx(cardIdx);
       }, 300);
+      animationTimers.add(amountTimer);
 
-      t2 = window.setTimeout(() => {
+      const pillTimer = window.setTimeout(() => {
+        animationTimers.delete(pillTimer);
         setPillPopIdx(null);
       }, 900);
-    }, 6000);
+      animationTimers.add(pillTimer);
+    };
+
+    const scheduleCycle = () => {
+      clearTimeout(cycleTimer);
+      if (!isVisible.current || !pageVisible) return;
+      cycleTimer = window.setTimeout(() => {
+        runCycle();
+        scheduleCycle();
+      }, 6000);
+    };
+
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        isVisible.current = e.isIntersecting;
+        scheduleCycle();
+      },
+      { threshold: 0.1 },
+    );
+    if (panelRef.current) obs.observe(panelRef.current);
+
+    const handleVisibilityChange = () => {
+      pageVisible = document.visibilityState === "visible";
+      if (!pageVisible) {
+        clearTimeout(cycleTimer);
+        clearAnimationTimers();
+      } else {
+        scheduleCycle();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      clearInterval(iv);
-      clearTimeout(t1);
-      clearTimeout(t2);
+      clearTimeout(cycleTimer);
+      clearAnimationTimers();
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange,
+      );
       obs.disconnect();
     };
   }, [shouldReduceMotion]);
@@ -269,9 +306,14 @@ function IndustryMarquee() {
         borderTop: "1px solid rgba(255,255,255,0.06)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
-      aria-hidden="true"
     >
-      <div className="mbs-marquee-track flex whitespace-nowrap">
+      <span className="sr-only">
+        Industries served: {INDUSTRIES.join(", ")}
+      </span>
+      <div
+        className="mbs-marquee-track flex whitespace-nowrap"
+        aria-hidden="true"
+      >
         {[...INDUSTRIES, ...INDUSTRIES].map((name, i) => (
           <span key={i} className="inline-flex items-center gap-5 px-5">
             <span
@@ -530,29 +572,8 @@ export default function Home() {
     "Apply once and access multiple business funding options tailored to your company's needs. Compare offers, choose confidently, and move forward faster.",
   );
 
-  // Hero video playback (replicates AmbientVideo logic; don't modify AmbientVideo.tsx)
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return;
-    video.muted = true;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      video.pause();
-    } else {
-      video.play().catch(() => {
-        video.addEventListener("canplay", () => video.play().catch(() => {}), {
-          once: true,
-        });
-      });
-    }
-    const onChange = (e: MediaQueryListEvent) => {
-      if (e.matches) video.pause();
-      else video.play().catch(() => {});
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+  useAutoplayVideo(heroVideoRef);
 
   return (
     <Layout mainClassName="flex-1">
@@ -566,6 +587,7 @@ export default function Home() {
           ref={heroVideoRef}
           className="absolute inset-0 w-full h-full object-cover"
           poster="/videos/hero-band-poster.jpg"
+          autoPlay
           muted
           loop
           playsInline

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 
 interface CountUpProps {
   /** Full value string, e.g. "6", "24hr", "$5M+". Numeric part animates; prefix/suffix render static. */
@@ -18,10 +19,7 @@ export function CountUp({ value, className = "" }: CountUpProps) {
   const [current, setCurrent] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
 
-  const prefersReducedMotion =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -30,7 +28,12 @@ export function CountUp({ value, className = "" }: CountUpProps) {
     }
     const el = ref.current;
     if (!el) return;
+    if (!("IntersectionObserver" in window)) {
+      setCurrent(num);
+      return;
+    }
     let fired = false;
+    let animationFrame = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !fired) {
@@ -44,15 +47,20 @@ export function CountUp({ value, className = "" }: CountUpProps) {
             // cubic ease-out
             const eased = 1 - Math.pow(1 - progress, 3);
             setCurrent(Math.round(eased * num));
-            if (progress < 1) requestAnimationFrame(tick);
+            if (progress < 1) {
+              animationFrame = requestAnimationFrame(tick);
+            }
           };
-          requestAnimationFrame(tick);
+          animationFrame = requestAnimationFrame(tick);
         }
       },
       { threshold: 0.5 },
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animationFrame);
+    };
   }, [num, prefersReducedMotion]);
 
   return (

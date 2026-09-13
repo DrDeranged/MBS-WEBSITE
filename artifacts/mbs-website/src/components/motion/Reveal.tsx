@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, CSSProperties, ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
 
 interface RevealProps {
   children: ReactNode;
@@ -11,10 +12,7 @@ export function Reveal({ children, delay = 0, className = "" }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
-  const prefersReducedMotion =
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false;
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -23,6 +21,10 @@ export function Reveal({ children, delay = 0, className = "" }: RevealProps) {
     }
     const el = ref.current;
     if (!el) return;
+    if (!("IntersectionObserver" in window)) {
+      setVisible(true);
+      return;
+    }
     let fired = false;
     const observer = new IntersectionObserver(
       ([entry]) => {
