@@ -1,0 +1,30 @@
+# Post-launch hardening audit
+
+Live verification target: `https://my-business-solutions.com`
+
+## W1 — Mobile motion
+
+| Element | Before | After | Evidence |
+| --- | --- | --- | --- |
+| Hero video | Imperative autoplay had a one-shot retry without cleanup and continued in hidden tabs. | Shared autoplay handling adds declarative autoplay, iOS-safe muted playback, retry cleanup, poster fallback, tab pause/resume, and reduced-motion pause. | 390px iOS Safari and Android Chrome emulation: video playing inline, current time advancing, zero overflow, no console errors. |
+| Match panel | Started its interval before confirmed visibility and kept timers active in background tabs. | Rotation begins only while intersecting and page-visible; all cycle and animation timers are cleared on hide/unmount and reset on return. | Timer lifecycle inspected after implementation; TypeScript clean. |
+| Industry marquee | Visual track was fully hidden from assistive technology. | Transform-only duplicated animation remains; a static screen-reader list exposes the industries. | Computed animation uses `mbs-marquee` with a changing transform matrix. |
+| Reveal entrances | Reduced-motion preference was sampled once; missing IntersectionObserver could leave content hidden. | Uses the reactive reduced-motion hook and immediately reveals content when IntersectionObserver is unavailable. | Reduced-motion emulation: no Reveal opacity transitions and no Reveal content hidden. |
+| Calculator/count-up | Pulse timeout and count-up RAF could survive unmount/value changes. | RAF and timeout cleanup added; reduced motion skips calculator pulse/key updates. | TypeScript clean; reduced-motion behavior static. |
+
+## W2 — Live-domain correctness
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Apex HTTPS | PASS | `https://my-business-solutions.com/` returns 200. |
+| `www` HTTPS | FAIL — external configuration | `https://www.my-business-solutions.com/` fails TLS. Replit reports only the generated URL as an additional domain; `www` is not registered separately. |
+| Custom-domain leakage | PASS | Rendered HTML, canonical, `og:url`, robots, and sitemap contain no `mbs-assets.replit.app`. |
+| Route metadata | PASS | All public routes return route-specific custom-domain canonical and Open Graph URLs. |
+| Redirects | PASS | All 23 configured legacy paths return HTTP 301 with the intended Location. |
+| Branded 404 | PASS | Unknown route returns HTTP 404, branded page shell, and `noindex, follow`. |
+| Favicon/social image | PASS | `/favicon.svg` and `/og.png` return 200 with correct content types. |
+| Browser console | PASS | Eleven-route 390px live sweep reports no errors, no overflow, and no generated-domain leakage. |
+
+### Required `www` action
+
+In Replit Publishing, add `www.my-business-solutions.com` as a separate custom domain. Replit will provide its own A and TXT records. Add those exact records in GoDaddy, retain the TXT record for SSL renewal, then complete Replit verification. Do not reuse or guess the apex values.
