@@ -104,7 +104,8 @@ export default function BlogArticle({ params }: Props) {
 
   usePageMeta(
     post ? `${post.title} | My Business Solutions` : "Article not found | MBS",
-    post?.excerpt,
+    post?.excerpt ?? "The requested article could not be found.",
+    { noIndex: !post },
   );
 
   if (!post) {

@@ -3,7 +3,11 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { Link } from "wouter";
 
 export default function NotFound() {
-  usePageMeta("Page Not Found | My Business Solutions");
+  usePageMeta(
+    "Page Not Found | My Business Solutions",
+    "The requested page could not be found.",
+    { noIndex: true },
+  );
   return (
     <Layout>
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32 min-h-[60vh] flex flex-col items-center justify-center text-center">

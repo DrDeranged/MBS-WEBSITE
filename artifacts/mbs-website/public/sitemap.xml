@@ -26,6 +26,21 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://my-business-solutions.com/blog/working-capital-vs-term-loans</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://my-business-solutions.com/blog/what-lenders-look-at-bank-statements</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://my-business-solutions.com/blog/how-to-prepare-your-funding-application</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://my-business-solutions.com/privacy-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

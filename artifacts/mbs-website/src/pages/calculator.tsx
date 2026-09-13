@@ -23,14 +23,14 @@ function Segmented<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="inline-flex rounded-xl border border-border overflow-hidden bg-muted p-0.5 gap-0.5">
+    <div className="flex w-full rounded-xl border border-border overflow-hidden bg-muted p-0.5 gap-0.5">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
           aria-pressed={value === o.value}
-          className={`min-h-11 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-150 focus:outline-none ${
+          className={`min-h-11 min-w-0 flex-1 px-2 py-2 text-sm font-semibold rounded-lg transition-all duration-150 focus:outline-none sm:px-4 ${
             value === o.value
               ? "bg-white text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"

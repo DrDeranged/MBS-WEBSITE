@@ -1,37 +1,81 @@
 import { useEffect } from "react";
 
-/**
- * Sets document.title and the meta[name="description"] tag for the current page.
- * Restores previous values on unmount.
- */
-export function usePageMeta(title: string, description?: string) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = title;
-    return () => {
-      document.title = prev;
-    };
-  }, [title]);
+const SITE_URL = "https://my-business-solutions.com";
 
+type PageMetaOptions = {
+  noIndex?: boolean;
+};
+
+function setMeta(
+  selector: string,
+  attribute: "name" | "property",
+  key: string,
+  content: string,
+) {
+  let tag = document.querySelector(selector) as HTMLMetaElement | null;
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attribute, key);
+    document.head.appendChild(tag);
+  }
+  tag.content = content;
+}
+
+export function usePageMeta(
+  title: string,
+  description = "",
+  options: PageMetaOptions = {},
+) {
   useEffect(() => {
-    if (!description) return;
-    let tag = document.querySelector(
-      'meta[name="description"]',
-    ) as HTMLMetaElement | null;
-    const created = !tag;
-    if (!tag) {
-      tag = document.createElement("meta");
-      tag.setAttribute("name", "description");
-      document.head.appendChild(tag);
+    document.title = title;
+
+    const path =
+      window.location.pathname === "/"
+        ? "/"
+        : window.location.pathname.replace(/\/+$/, "");
+    const canonicalUrl = new URL(path, SITE_URL).toString();
+
+    let canonical = document.querySelector(
+      'link[rel="canonical"]',
+    ) as HTMLLinkElement | null;
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
     }
-    const prev = tag.content;
-    tag.content = description;
-    return () => {
-      if (created) {
-        tag?.remove();
-      } else if (tag) {
-        tag.content = prev;
-      }
-    };
-  }, [description]);
+    canonical.href = canonicalUrl;
+
+    setMeta(
+      'meta[name="robots"]',
+      "name",
+      "robots",
+      options.noIndex ? "noindex, follow" : "index, follow",
+    );
+    setMeta('meta[property="og:title"]', "property", "og:title", title);
+    setMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
+    setMeta('meta[property="og:type"]', "property", "og:type", "website");
+    setMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
+    setMeta('meta[name="twitter:url"]', "name", "twitter:url", canonicalUrl);
+
+    if (description) {
+      setMeta(
+        'meta[name="description"]',
+        "name",
+        "description",
+        description,
+      );
+      setMeta(
+        'meta[property="og:description"]',
+        "property",
+        "og:description",
+        description,
+      );
+      setMeta(
+        'meta[name="twitter:description"]',
+        "name",
+        "twitter:description",
+        description,
+      );
+    }
+  }, [description, options.noIndex, title]);
 }
