@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  motion,
-  useReducedMotion,
-} from "framer-motion";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Reveal } from "@/components/motion/Reveal";
@@ -91,7 +88,7 @@ function fmt(n: number) {
 }
 
 function HeroMockPanel() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotionPreference();
   const panelRef = useRef<HTMLDivElement>(null);
   const isVisible = useRef(false);
   const cycleRef = useRef(0);
@@ -235,15 +232,8 @@ function HeroMockPanel() {
               </p>
             </div>
 
-            <motion.span
-              animate={{
-                scale: pillPopIdx === i ? [1, 1.22, 0.95, 1] : 1,
-                boxShadow: pillPopIdx === i
-                  ? ["0 0 0px rgba(23,165,103,0)", "0 0 14px rgba(23,165,103,0.55)", "0 0 6px rgba(23,165,103,0.25)"]
-                  : "0 0 0px rgba(23,165,103,0)",
-              }}
-              transition={{ duration: 0.5, times: [0, 0.35, 0.7, 1] }}
-              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-white"
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold text-white${pillPopIdx === i && !shouldReduceMotion ? " mbs-pill-pop" : ""}`}
               style={{ background: "linear-gradient(135deg, #1DB674 0%, #149258 100%)" }}
             >
               {/* tiny check */}
@@ -251,7 +241,7 @@ function HeroMockPanel() {
                 <path d="M1 4.5l2.3 2.3 4.7-4.3" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Matched
-            </motion.span>
+            </span>
           </div>
         ))}
       </div>

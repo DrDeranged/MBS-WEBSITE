@@ -1,15 +1,11 @@
 import { lazy, Suspense, type ReactNode, useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { Toaster } from '@/components/ui/toaster';
-import { TooltipProvider } from '@/components/ui/tooltip';
 import {
   Route,
   Switch,
   useLocation,
   Router as WouterRouter,
 } from 'wouter';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { MbsAssistLauncher } from '@/components/MbsAssistLauncher';
 import { buildApplyUrl } from '@/lib/applyUrl';
 
@@ -41,34 +37,14 @@ function ExternalRedirect({ to }: { to: string }) {
   return null;
 }
 
-const queryClient = new QueryClient();
-
-function PageTransition({ children }: { children: ReactNode }) {
-  const [location] = useLocation();
-  const prefersReducedMotion = useReducedMotion();
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={location}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: prefersReducedMotion ? 0 : 0.15 } }}
-        exit={{ opacity: 0, transition: { duration: prefersReducedMotion ? 0 : 0.1 } }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
-  );
-}
-
 function RouteFallback() {
-  const prefersReducedMotion = useReducedMotion();
   return (
     <div
       className="min-h-screen bg-background flex items-center justify-center"
       role="status"
       aria-label="Loading page"
     >
-      <span className={`h-8 w-8 rounded-full border-2 border-border border-t-primary ${prefersReducedMotion ? "" : "animate-spin"}`} />
+      <span className="h-8 w-8 rounded-full border-2 border-border border-t-primary motion-safe:animate-spin" />
     </div>
   );
 }
@@ -79,8 +55,7 @@ function Router() {
       {/* Silently strip trailing slashes from any URL */}
       <TrailingSlashRedirect />
       <Suspense fallback={<RouteFallback />}>
-        <PageTransition>
-          <Switch>
+        <Switch>
             <Route path="/" component={Home} />
             <Route path="/calculator" component={Calculator} />
             <Route path="/about" component={About} />
@@ -94,8 +69,7 @@ function Router() {
               {() => <ExternalRedirect to={buildApplyUrl("get-started-redirect")} />}
             </Route>
             <Route component={NotFound} />
-          </Switch>
-        </PageTransition>
+        </Switch>
       </Suspense>
     </RoutedErrorBoundary>
   );
@@ -108,15 +82,10 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-          <MbsAssistLauncher />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+      <Router />
+      <MbsAssistLauncher />
+    </WouterRouter>
   );
 }
 

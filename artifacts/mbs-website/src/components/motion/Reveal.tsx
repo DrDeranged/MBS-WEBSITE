@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, CSSProperties, ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 interface RevealProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ export function Reveal({ children, delay = 0, className = "" }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotionPreference();
 
   useEffect(() => {
     if (prefersReducedMotion) {

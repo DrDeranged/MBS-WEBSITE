@@ -220,6 +220,41 @@
   .mbs-marquee-track { animation-play-state: paused; }
 }
 
+@keyframes mbs-pill-pop {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(23,165,103,0); }
+  35% { transform: scale(1.22); box-shadow: 0 0 14px rgba(23,165,103,0.55); }
+  70% { transform: scale(0.95); box-shadow: 0 0 6px rgba(23,165,103,0.25); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(23,165,103,0); }
+}
+
+.mbs-pill-pop {
+  animation: mbs-pill-pop 0.5s ease;
+}
+
+@keyframes mbs-assist-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.mbs-assist-launcher {
+  animation: mbs-assist-enter 0.45s 0.4s both;
+  transition: transform 0.15s ease;
+}
+
+.mbs-assist-launcher:hover { transform: translateY(-3px); }
+.mbs-assist-launcher:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mbs-pill-pop,
+  .mbs-assist-launcher {
+    animation: none;
+  }
+  .mbs-assist-launcher:hover,
+  .mbs-assist-launcher:active {
+    transform: none;
+  }
+}
+
 /* ── Hero "simplified" underline draw ─────────────────────────────────────── */
 @keyframes mbs-underline-draw {
   from { stroke-dashoffset: 280; }

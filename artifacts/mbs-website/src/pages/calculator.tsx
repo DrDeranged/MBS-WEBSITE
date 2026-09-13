@@ -3,7 +3,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { calcPayment, type Frequency } from "@/lib/calcMath";
 import { buildApplyUrl } from "@/lib/applyUrl";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 function fmt(n: number) {
@@ -349,7 +349,7 @@ const FREQ_OPTIONS: { value: Frequency; label: string }[] = [
 const DEFAULT_BAND_APR = 24;
 
 export default function Calculator() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotionPreference();
   usePageMeta(
     "Business Funding Calculator | My Business Solutions",
     "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",

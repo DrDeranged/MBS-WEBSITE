@@ -1,5 +1,4 @@
 import { lazy, Suspense, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { useLocation } from "wouter";
 
 const LazyMbsAssist = lazy(() =>
@@ -7,7 +6,6 @@ const LazyMbsAssist = lazy(() =>
 );
 
 export function MbsAssistLauncher() {
-  const prefersReducedMotion = useReducedMotion();
   const [location] = useLocation();
   const [loaded, setLoaded] = useState(false);
 
@@ -20,19 +18,10 @@ export function MbsAssistLauncher() {
   }
 
   return (
-    <motion.button
-      initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.94 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={
-        prefersReducedMotion
-          ? { duration: 0 }
-          : { delay: 0.4, type: "spring", stiffness: 380, damping: 26 }
-      }
-      whileHover={prefersReducedMotion ? {} : { y: -3 }}
-      whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+    <button
       onClick={() => setLoaded(true)}
       aria-label="Ask MBS — open chat"
-      className={`fixed right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3 font-semibold text-sm text-white select-none focus-visible:outline-none ${location === "/calculator" ? "bottom-24" : "bottom-6"}`}
+      className={`mbs-assist-launcher fixed right-6 z-50 flex items-center gap-2.5 rounded-full px-5 py-3 font-semibold text-sm text-white select-none focus-visible:outline-none ${location === "/calculator" ? "bottom-24" : "bottom-6"}`}
       style={{
         background: "rgba(14,42,71,0.82)",
         backdropFilter: "blur(16px)",
@@ -49,6 +38,6 @@ export function MbsAssistLauncher() {
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       Ask MBS
-    </motion.button>
+    </button>
   );
 }

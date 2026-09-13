@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
 
 interface CountUpProps {
   /** Full value string, e.g. "6", "24hr", "$5M+". Numeric part animates; prefix/suffix render static. */
@@ -19,7 +19,7 @@ export function CountUp({ value, className = "" }: CountUpProps) {
   const [current, setCurrent] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
 
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotionPreference();
 
   useEffect(() => {
     if (prefersReducedMotion) {

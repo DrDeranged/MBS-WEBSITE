@@ -41,3 +41,16 @@ In Replit Publishing, add `www.my-business-solutions.com` as a separate custom d
 | MbsAssist validation | PASS after fix | Invalid, null, and oversized conversations return 400 before rate-limit/model use; request body is capped at 32 KB and unapproved origins return 403. |
 | MbsAssist limiter | PASS | Dependency-free local test allowed requests 1–10 and rejected request 11 without invoking the model. |
 | Application status | PASS | `/apply/status` returns 200 without redirect. |
+
+## W4 — Lighthouse performance
+
+Baseline Lighthouse 13.4.1, run against the custom live domain:
+
+| Route | Profile | Performance | Accessibility | Best Practices | SEO |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Home | Mobile | 55 | 100 | 100 | 100 |
+| Home | Desktop | 94 | 100 | 100 | 100 |
+| Calculator | Mobile | 66 | 100 | 100 | 100 |
+| Calculator | Desktop | 98 | 100 | 100 | 100 |
+
+Mobile performance missed the 85 target. The largest standard opportunity was unused startup JavaScript. Unused eager React Query, Tooltip, and Toaster providers were removed; cosmetic eager Framer Motion usage was replaced with native reduced-motion handling and CSS while the full assistant panel remains lazy. The production entry bundle decreased from about 482 KB to 230 KB. Final live scores must be recorded after the single post-workstream publish.
