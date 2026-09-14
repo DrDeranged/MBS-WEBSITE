@@ -69,6 +69,7 @@ export function Header() {
               alt="My Business Solutions"
               width="228"
               height="64"
+              fetchPriority="high"
               className={`object-contain transition-all duration-300 ${scrolled ? "h-8" : "h-9 sm:h-11"}`}
             />
           </Link>
@@ -131,6 +132,7 @@ export function Header() {
             alt="My Business Solutions"
             width="228"
             height="64"
+            fetchPriority="high"
             className="h-8 object-contain"
           />
           <button
