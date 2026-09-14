@@ -1,9 +1,11 @@
-import { type RefObject, useEffect } from "react";
+import { type RefObject, useEffect, useState } from "react";
 
 export function useAutoplayVideo(
   ref: RefObject<HTMLVideoElement | null>,
   enabled = true,
 ) {
+  const [playbackBlocked, setPlaybackBlocked] = useState(false);
+
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -23,9 +25,10 @@ export function useAutoplayVideo(
       if (
         document.visibilityState === "visible"
       ) {
-        void video.play().catch(() => {
-          // Autoplay is blocked; the branded poster remains visible.
-        });
+        void video.play().then(
+          () => setPlaybackBlocked(false),
+          () => setPlaybackBlocked(true),
+        );
       }
     };
 
@@ -37,12 +40,16 @@ export function useAutoplayVideo(
         return;
       }
 
-      void video.play().catch(() => {
-        if (!retryAttached) {
-          retryAttached = true;
-          video.addEventListener("canplay", retryPlayback, { once: true });
-        }
-      });
+      void video.play().then(
+        () => setPlaybackBlocked(false),
+        () => {
+          setPlaybackBlocked(true);
+          if (!retryAttached) {
+            retryAttached = true;
+            video.addEventListener("canplay", retryPlayback, { once: true });
+          }
+        },
+      );
     };
 
     const handleVisibilityChange = () => {
@@ -65,4 +72,6 @@ export function useAutoplayVideo(
       video.pause();
     };
   }, [enabled, ref]);
+
+  return playbackBlocked;
 }

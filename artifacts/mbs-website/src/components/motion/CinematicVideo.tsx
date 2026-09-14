@@ -59,17 +59,22 @@ export function CinematicVideo({
     return () => observer.disconnect();
   }, []);
 
-  useAutoplayVideo(videoRef, inView && !reducedMotion);
+  const playbackBlocked = useAutoplayVideo(videoRef, inView && !reducedMotion);
+  const showStaticGradient = reducedMotion || playbackBlocked;
 
   return (
     <section
       ref={sectionRef}
       className={`relative overflow-hidden ${className}`}
       aria-label={ariaLabel}
+      style={{
+        background:
+          "linear-gradient(135deg, #0E2A47 0%, #1F4E79 58%, #123D5F 100%)",
+      }}
     >
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        className={`absolute inset-0 h-full w-full object-cover ${showStaticGradient ? "invisible" : ""}`}
         poster={poster}
         autoPlay
         muted

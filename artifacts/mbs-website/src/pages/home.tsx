@@ -566,7 +566,12 @@ export default function Home() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const [heroInView, setHeroInView] = useState(true);
   const prefersReducedMotion = useReducedMotionPreference();
-  useAutoplayVideo(heroVideoRef, heroInView && !prefersReducedMotion);
+  const heroPlaybackBlocked = useAutoplayVideo(
+    heroVideoRef,
+    heroInView && !prefersReducedMotion,
+  );
+  const showStaticHeroGradient =
+    prefersReducedMotion || heroPlaybackBlocked;
 
   useEffect(() => {
     const section = heroSectionRef.current;
@@ -585,12 +590,18 @@ export default function Home() {
       <section
         ref={heroSectionRef}
         className="relative overflow-hidden flex flex-col justify-center"
-        style={{ minHeight: "100dvh", paddingTop: "96px", paddingBottom: "72px" }}
+        style={{
+          minHeight: "100dvh",
+          paddingTop: "96px",
+          paddingBottom: "72px",
+          background:
+            "linear-gradient(135deg, #0E2A47 0%, #1F4E79 58%, #123D5F 100%)",
+        }}
       >
         {/* Full-bleed video background */}
         <video
           ref={heroVideoRef}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${showStaticHeroGradient ? "invisible" : ""}`}
           poster="/videos/hero-band-poster.jpg"
           autoPlay
           muted
