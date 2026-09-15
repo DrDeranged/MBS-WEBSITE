@@ -221,7 +221,7 @@ function ResultsCard({
         rel="noopener noreferrer"
         className="btn-primary w-full text-base"
       >
-        Get your real offer <span className="btn-arrow">→</span>
+        Apply Now <span className="btn-arrow">→</span>
       </a>
     </div>
   );
@@ -286,7 +286,7 @@ function MobileBar({
           rel="noopener noreferrer"
           className="btn-primary min-h-12 text-sm px-5"
         >
-          Apply
+          Apply Now
         </a>
       </div>
 
@@ -352,7 +352,7 @@ export default function Calculator() {
   const shouldReduceMotion = useReducedMotionPreference();
   usePageMeta(
     "Business Funding Calculator | My Business Solutions",
-    "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
+    "Estimate your business loan payments with our interactive calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
   );
 
   // ── Control state ───────────────────────────────────────────────────────────
@@ -449,8 +449,8 @@ export default function Calculator() {
             Estimate your payments
           </h1>
           <p className="text-lg max-w-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.68)" }}>
-            Adjust the numbers to preview estimated payments — then get your
-            real offer in minutes.
+            Adjust the numbers to preview estimated payments and review the
+            details before taking the next step.
           </p>
         </div>
       </section>

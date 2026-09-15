@@ -431,7 +431,7 @@ export function MbsAssist({ initialOpen = false }: { initialOpen?: boolean }) {
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M5 12h14M12 5l7 7-7 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Apply now — it's free
+                  Apply Now
                 </a>
               </div>
             </div>

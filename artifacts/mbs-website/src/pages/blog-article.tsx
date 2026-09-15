@@ -199,7 +199,7 @@ export default function BlogArticle({ params }: Props) {
                 className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                 style={{ backgroundColor: "#17A567" }}
               >
-                Apply now — it's free
+                Apply Now
               </a>
             </div>
           </Reveal>

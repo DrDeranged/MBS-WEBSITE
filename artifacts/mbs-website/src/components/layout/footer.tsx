@@ -84,6 +84,14 @@ export function Footer() {
             <ul className="flex flex-col gap-4 text-cloud/80">
               <li>Contact support or sales to find the right funding for you.</li>
               <li>
+                <a
+                  href="tel:+19088608507"
+                  className="hover:text-white transition-colors"
+                >
+                  (908) 860-8507
+                </a>
+              </li>
+              <li>
                 <Link href="/contact" className="text-white underline underline-offset-4 hover:text-accent transition-colors">
                   Contact Us
                 </Link>

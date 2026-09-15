@@ -105,7 +105,7 @@ const pageMetadata = new Map([
     {
       title: "Business Funding Calculator | My Business Solutions",
       description:
-        "Estimate your business loan payments with our free calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
+        "Estimate your business loan payments with our interactive calculator. Adjust funding amount, term, and rate to preview monthly, bi-weekly, weekly, or daily payments.",
     },
   ],
   [

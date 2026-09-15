@@ -548,7 +548,7 @@ function MiniCalc() {
           rel="noopener noreferrer"
           className="btn-primary text-sm"
         >
-          Apply now — it's free
+          Apply Now
         </a>
       </div>
     </div>
@@ -932,13 +932,13 @@ export default function Home() {
                   className="inline-flex items-center justify-center rounded-full text-white px-8 py-4 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(23,165,103,0.40)]"
                   style={{ backgroundColor: GREEN }}
                 >
-                  Apply now — it's free
+                  Apply Now
                 </a>
                 <a
                   href="/calculator"
                   className="inline-flex items-center justify-center rounded-full border-2 border-primary text-primary px-8 py-4 text-base font-semibold transition-all duration-200 hover:bg-primary hover:text-white"
                 >
-                  Full calculator
+                  Take the next step
                 </a>
               </div>
             </Reveal>
@@ -960,15 +960,18 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-6 py-24 text-center">
           <Reveal>
             <h2 className="font-heading text-4xl font-bold text-white md:text-6xl">
-              Ready to see your options?
+              Let's get started
             </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-white/80">
+              Tell us about your business and a specialist will follow up within one business day.
+            </p>
             <a
               href={buildApplyUrl("cta-band")}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary mt-8 px-8"
             >
-              Apply now — it takes minutes
+              Apply Now
             </a>
           </Reveal>
         </div>
