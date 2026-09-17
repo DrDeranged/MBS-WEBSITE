@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { Reveal } from "@/components/motion/Reveal";
+import { Link } from "wouter";
 
 // Verbatim text from https://my-business-solutions.com/terms-of-service/
 // Last updated: March 13, 2026
@@ -29,6 +30,10 @@ const SECTIONS = [
   {
     heading: "14. Application Agreement",
     body: "When submitting your application, you agree to the following:\n\nI certify that my answers are true and complete to the best of my knowledge.\n\nBy signing below, each of the above listed Business Owner(s)/Officer(s)/Principal(s) and Business (individually and collectively, \"You\") certify that all information and documents submitted in connection with this Funding Application (\"Application\") are accurate, true, correct and complete; and that You will immediately notify My Business Solutions (\"MBS\") or any of its representatives, successors, assigns, designees, agents, partners or affiliates (\"Recipients\") of any change in such information or financial condition. You acknowledge that any false statements may be considered fraud. You acknowledge that the Recipients are relying on the information You provide. You further authorize MBS and each of the Recipients that may be involved with or acquire commercial loans having daily repayment features or purchases of future receivables including Merchant Cash Advance transactions (collectively, \"Transactions\") to obtain consumer or personal, business and investigative reports and other information about You, including, but not limited to credit card processor statements and bank statements, from one or more consumer reporting agencies, such as TransUnion, Experian and Equifax, and from other credit bureaus, banks, financial institutions, creditors and other third parties. You authorize Recipients to receive relevant information regarding the commercial lease for the above-referenced premises from our finance company and/or agent. You also authorize MBS to transmit this Application, along with any of the foregoing information obtained in connection with this Application, to any or all of the Recipients for the foregoing purposes. A photocopy of the Application will be deemed acceptable for release of credit and/or investigatory information.",
+  },
+  {
+    heading: "SMS Terms",
+    body: "Program name: My Business Solutions LLC customer care messages.\n\nMessage types include application received, documents needed, status updates, and rep follow-up.\n\nMessage frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help. Carriers are not liable for delayed or undelivered messages.",
   },
   {
     heading: "15. Contact Information",
@@ -92,6 +97,18 @@ export default function TermsOfService() {
                         {para}
                       </p>
                     ))}
+                    {sec.heading === "SMS Terms" && (
+                      <p className="text-muted-foreground leading-relaxed text-sm">
+                        See our{" "}
+                        <Link
+                          href="/privacy-policy"
+                          className="text-primary underline underline-offset-4 hover:text-accent transition-colors"
+                        >
+                          Privacy Policy
+                        </Link>
+                        .
+                      </p>
+                    )}
                   </div>
                 </div>
               </Reveal>

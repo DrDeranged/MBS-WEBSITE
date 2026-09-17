@@ -21,6 +21,10 @@ const SECTIONS = [
     body: "We maintain a strict policy against the sharing of your communication data. Your phone number, message content, and call history are never sold, traded, or shared with third parties for their independent use. Furthermore, we confirm that none of the information collected through our SMS or calling services will be used for marketing purposes. You will not receive unsolicited promotional material, and your data will not be utilized to build advertising profiles or shared with external marketing agencies.",
   },
   {
+    heading: "SMS Communications",
+    body: "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes.\n\nWhen you opt in to SMS communications, we collect your phone number and consent timestamp. My Business Solutions LLC uses this information to send application status and customer care messages. To opt out, reply STOP.",
+  },
+  {
     heading: "In short",
     body: "We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained.",
   },
@@ -63,9 +67,13 @@ export default function PrivacyPolicy() {
                       {sec.heading}
                     </h2>
                   )}
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {sec.body}
-                  </p>
+                  <div className="space-y-3">
+                    {sec.body.split("\n\n").map((para, pi) => (
+                      <p key={pi} className="text-muted-foreground leading-relaxed text-base">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </Reveal>
             ))}
