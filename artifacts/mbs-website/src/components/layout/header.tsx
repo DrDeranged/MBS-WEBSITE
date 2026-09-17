@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useEffect, useState, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { buildApplyUrl } from "@/lib/applyUrl";
+import reverseLogo from "@/assets/brand/mbs-logo-green-slash-reverse.png";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -65,12 +66,12 @@ export function Header() {
           {/* Logo — white variant (always on dark/transparent-over-dark bg) */}
           <Link href="/" className="flex items-center flex-none">
             <img
-              src="/images/mbs-logo-footer.png"
+              src={reverseLogo}
               alt="My Business Solutions"
-              width="228"
-              height="64"
+              width="844"
+              height="369"
               fetchPriority="high"
-              className={`object-contain transition-all duration-300 ${scrolled ? "h-8" : "h-9 sm:h-11"}`}
+              className={`w-auto object-contain transition-all duration-300 ${scrolled ? "h-8" : "h-9 sm:h-11"}`}
             />
           </Link>
 
@@ -128,12 +129,12 @@ export function Header() {
       >
         <div className="flex items-center justify-between p-6 border-b border-white/10">
           <img
-            src="/images/mbs-logo-footer.png"
+            src={reverseLogo}
             alt="My Business Solutions"
-            width="228"
-            height="64"
+            width="844"
+            height="369"
             fetchPriority="high"
-            className="h-8 object-contain"
+            className="h-8 w-auto object-contain"
           />
           <button
             className="p-2 -mr-2 text-white/50 hover:text-white transition-colors"

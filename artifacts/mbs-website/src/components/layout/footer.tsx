@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { buildApplyUrl } from "@/lib/applyUrl";
+import logo from "@/assets/brand/mbs-logo-green-slash.png";
 
 export function Footer() {
   const quickLinks: { href: string; label: string; external?: boolean }[] = [
@@ -18,10 +19,10 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6">
               <div className="bg-white px-3 py-2 rounded-xl inline-flex">
                 <img
-                  src="/images/mbs-logo.png"
+                  src={logo}
                   alt="My Business Solutions"
-                  width="228"
-                  height="64"
+                  width="844"
+                  height="369"
                   className="h-7 w-auto object-contain"
                 />
               </div>
