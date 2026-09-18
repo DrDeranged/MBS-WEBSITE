@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/layout";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { calcPayment, type Frequency } from "@/lib/calcMath";
+import { calcPayment, calcSimpleInterestRate, type Frequency } from "@/lib/calcMath";
 import { buildApplyUrl } from "@/lib/applyUrl";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useReducedMotionPreference } from "@/hooks/useReducedMotionPreference";
@@ -145,6 +145,11 @@ function ResultsCard({
   pulsing: boolean;
   animKey: number;
 }) {
+  const simpleInterestRate = calcSimpleInterestRate(
+    principal,
+    result.totalRepayment,
+    termMonths,
+  );
   const principalPct = Math.max(
     0,
     Math.min(100, Math.round((principal / result.totalRepayment) * 100)),
@@ -173,6 +178,10 @@ function ResultsCard({
       {[
         { label: "Total repayment",      value: fmtDollar(result.totalRepayment) },
         { label: "Total cost of capital", value: fmtDollar(result.totalCost) },
+        {
+          label: "Simple interest rate (finance charge ÷ amount ÷ years)",
+          value: `${(simpleInterestRate * 100).toFixed(2)}%`,
+        },
         { label: "Number of payments",   value: fmt(result.numPeriods) },
       ].map((row) => (
         <div
@@ -185,6 +194,10 @@ function ResultsCard({
           </span>
         </div>
       ))}
+
+      <p className="text-xs text-muted-foreground mt-1">
+        This is not the same as APR.
+      </p>
 
       {/* Principal vs cost bar */}
       <div className="mt-5 mb-1">
@@ -242,6 +255,11 @@ function MobileBar({
   animKey: number;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const simpleInterestRate = calcSimpleInterestRate(
+    principal,
+    result.totalRepayment,
+    termMonths,
+  );
   return (
     <div
       className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border shadow-[0_-4px_16px_rgba(14,42,71,0.08)]"
@@ -296,6 +314,10 @@ function MobileBar({
           {[
             { label: "Total repayment",      value: fmtDollar(result.totalRepayment) },
             { label: "Total cost of capital", value: fmtDollar(result.totalCost) },
+            {
+              label: "Simple interest rate (finance charge ÷ amount ÷ years)",
+              value: `${(simpleInterestRate * 100).toFixed(2)}%`,
+            },
             { label: "Number of payments",   value: fmt(result.numPeriods) },
           ].map((row) => (
             <div
@@ -308,6 +330,9 @@ function MobileBar({
               </span>
             </div>
           ))}
+          <p className="text-[11px] mt-3 text-muted-foreground">
+            This is not the same as APR.
+          </p>
           <p className="text-[11px] mt-3" style={{ color: "#46586C" }}>
             Estimates are for illustration only and do not constitute an offer, quote, or
             guarantee of financing. Actual terms depend on underwriting and lender programs.

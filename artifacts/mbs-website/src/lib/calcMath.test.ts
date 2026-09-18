@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calcPayment, PERIODS_PER_YEAR } from "./calcMath";
+import { calcPayment, calcSimpleInterestRate, PERIODS_PER_YEAR } from "./calcMath";
 
 describe("payment frequency periods", () => {
   it("uses 26 periods per year for Bi-weekly", () => {
@@ -65,5 +65,16 @@ describe("calcPayment – bi-weekly frequency (26 periods/year)", () => {
     // n = 26, payment = 13000/26 = 500 exactly
     const { payment } = calcPayment(13_000, 12, 0, "Bi-weekly");
     expect(payment).toBe(500);
+  });
+});
+
+describe("calcSimpleInterestRate", () => {
+  it("uses finance charge divided by amount divided by years", () => {
+    expect(calcSimpleInterestRate(28_080, 41_656.56, 24)).toBeCloseTo(0.241747863, 9);
+  });
+
+  it("returns zero for a non-positive amount or term", () => {
+    expect(calcSimpleInterestRate(0, 10_000, 24)).toBe(0);
+    expect(calcSimpleInterestRate(10_000, 12_000, 0)).toBe(0);
   });
 });

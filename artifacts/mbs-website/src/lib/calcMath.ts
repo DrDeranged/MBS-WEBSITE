@@ -54,3 +54,13 @@ export function calcPayment(
 
   return { payment, totalRepayment, totalCost, numPeriods: n };
 }
+
+/** Annual simple-interest rate: finance charge ÷ amount ÷ years. */
+export function calcSimpleInterestRate(
+  principal: number,
+  totalRepayment: number,
+  termMonths: number,
+): number {
+  if (principal <= 0 || termMonths <= 0) return 0;
+  return ((totalRepayment - principal) / principal) / (termMonths / 12);
+}
