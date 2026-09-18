@@ -31,7 +31,7 @@ const redirects = new Map([
   ["/blog/", "/blog"],
   ["/privacy-policy/", "/privacy-policy"],
   ["/terms-of-service/", "/terms-of-service"],
-  ["/wp-content/uploads/2026/02/mbs-favicon.svg", "/favicon-512.png?v=2"],
+  ["/wp-content/uploads/2026/02/mbs-favicon.svg", "/favicon-512.png?v=3"],
 ]);
 
 for (const icon of [
