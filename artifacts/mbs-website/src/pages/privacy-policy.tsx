@@ -22,7 +22,7 @@ const SECTIONS = [
   },
   {
     heading: "SMS Communications",
-    body: "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes.\n\nWhen you opt in to SMS communications, we collect your phone number and consent timestamp. My Business Solutions LLC uses this information to send application status and customer care messages. To opt out, reply STOP.",
+    body: "We do not sell or share your SMS opt-in data or personal information with third parties for marketing purposes.\n\nWhen you opt in to SMS communications, we collect your phone number and consent timestamp. My Business Solutions LLC uses this information to send application status and customer care messages. To opt out, reply STOP.\n\nNo mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Mobile opt-in and consent data will not be shared with any third parties.\n\nWe also collect the IP address associated with your consent. Message frequency varies. Message and data rates may apply. Reply STOP to opt out and HELP for help.",
   },
   {
     heading: "In short",
