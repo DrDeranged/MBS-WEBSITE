@@ -321,6 +321,16 @@ createServer((request, response) => {
     return;
   }
 
+  const directoryIndexPath = join(filePath, "index.html");
+  if (
+    directoryIndexPath.startsWith(publicDir) &&
+    existsSync(directoryIndexPath) &&
+    statSync(directoryIndexPath).isFile()
+  ) {
+    sendFile(request, response, directoryIndexPath);
+    return;
+  }
+
   const isAssetRequest = extname(decodedPath) !== "";
   if (isAssetRequest) {
     response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });

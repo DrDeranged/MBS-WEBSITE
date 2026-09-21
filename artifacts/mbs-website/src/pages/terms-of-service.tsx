@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Link } from "wouter";
 
 // Verbatim text from https://my-business-solutions.com/terms-of-service/
-// Last updated: March 13, 2026
+// Last updated: September 20, 2026
 const INTRO = [
   "PLEASE READ THESE TERMS AND USE CAREFULLY. BY ACCESSING OUR SITES OR USING THE SERVICES, YOU AGREE TO BE BOUND BY THESE TERMS OF SERVICE. IF YOU DO NOT AGREE TO THESE TERMS, YOU MAY NOT USE THE SITE OR SERVICES AND MUST DISCONTINUE YOUR USE OF THE SITES AND SERVICES.",
   "These Terms of Service (the \"Terms of Service\") govern your use of the websites provided by My Business Solutions and its affiliates (dba \"MBS\", \"we\" or \"us\") whether accessed via computer, mobile device or otherwise (individually and collectively, the \"Sites\") as well as any products and services provided by MBS (the Sites, together with MBS, collectively referred to as the \"Service\").",
@@ -60,7 +60,7 @@ export default function TermsOfService() {
               Terms of Service
             </h1>
             <p className="text-base" style={{ color: "rgba(255,255,255,0.55)" }}>
-              My Business Solutions (MBS) &bull; Last updated: March 13, 2026
+              My Business Solutions (MBS) &bull; Last updated: September 20, 2026
             </p>
           </Reveal>
         </div>

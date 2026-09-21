@@ -49,7 +49,7 @@ export default function PrivacyPolicy() {
               Privacy Policy
             </h1>
             <p className="text-base" style={{ color: "rgba(255,255,255,0.55)" }}>
-              My Business Solutions (MBS) &bull; Last updated: March 13, 2026
+              My Business Solutions (MBS) &bull; Last updated: September 20, 2026
             </p>
           </Reveal>
         </div>
