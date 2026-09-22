@@ -18,6 +18,7 @@ const Blog = lazy(() => import('@/pages/blog'));
 const BlogArticle = lazy(() => import('@/pages/blog-article'));
 const PrivacyPolicy = lazy(() => import('@/pages/privacy-policy'));
 const TermsOfService = lazy(() => import('@/pages/terms-of-service'));
+const SmsOptIn = lazy(() => import('@/pages/sms-opt-in'));
 const NotFound = lazy(() => import('@/pages/not-found'));
 
 // ── Redirect helpers ──────────────────────────────────────────────────────────
@@ -66,6 +67,7 @@ function Router() {
             <Route path="/blog/:slug" component={BlogArticle} />
             <Route path="/privacy-policy" component={PrivacyPolicy} />
             <Route path="/terms-of-service" component={TermsOfService} />
+            <Route path="/sms-opt-in" component={SmsOptIn} />
             {/* Legacy WordPress route → external apply URL */}
             <Route path="/get-started">
               {() => <ExternalRedirect to={buildApplyUrl("get-started-redirect")} />}

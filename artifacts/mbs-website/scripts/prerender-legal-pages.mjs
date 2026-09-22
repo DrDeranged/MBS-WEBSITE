@@ -117,6 +117,13 @@ function renderTermsPage(intro, sections, updated) {
   return `<main data-prerendered-legal-page="terms-of-service">${renderHeader("Terms of Service", updated)}<section class="py-16 md:py-24 bg-background"><div class="mx-auto max-w-3xl px-6"><div class="space-y-4 mb-12">${introHtml}</div><div class="space-y-10">${content}</div></div></section></main>`;
 }
 
+function renderSmsOptInPage() {
+  const consentText =
+    "I agree to receive text messages from My Business Solutions LLC about my application (application received, documents needed, status updates). Message frequency varies. Message and data rates may apply. Reply STOP to cancel, HELP for help. See our Privacy Policy and Terms of Service.";
+
+  return `<main data-prerendered-legal-page="sms-opt-in"><section class="pt-28 pb-16 md:pt-36 md:pb-20" style="background:linear-gradient(160deg,#0E2A47 0%,#1F4E79 100%)"><div class="mx-auto max-w-3xl px-6"><h1 class="font-heading font-bold text-4xl md:text-5xl text-white">SMS Opt-In — My Business Solutions LLC</h1></div></section><section class="py-16 md:py-24 bg-background"><div class="mx-auto max-w-3xl px-6"><div class="space-y-8"><p class="text-muted-foreground leading-relaxed text-base">Business owners opt in to text messages by checking the box below on our online financing application at <a href="https://app.my-business-solutions.com/apply">https://app.my-business-solutions.com/apply</a>.</p><img src="/sms-opt-in.png" alt="SMS consent checkbox on the MBS financing application" class="w-full rounded-2xl border border-border shadow-sm" /><blockquote class="rounded-xl border border-border bg-muted/40 p-6 text-foreground leading-relaxed">“${escapeHtml(consentText)}”</blockquote><div class="space-y-3 text-muted-foreground leading-relaxed text-base"><p>The box is unchecked by default and is separate from the credit authorization.</p><p>Consent is recorded with a timestamp and IP address. No messages are sent to anyone who has not checked the box.</p></div><div class="flex flex-wrap gap-x-6 gap-y-3"><a href="https://my-business-solutions.com/privacy-policy">Privacy Policy</a><a href="https://my-business-solutions.com/terms-of-service">Terms of Service</a></div></div></div></section></main>`;
+}
+
 function applyMetadata(template, route, title, description) {
   const canonicalUrl = `https://my-business-solutions.com/${route}`;
   return template
@@ -209,6 +216,16 @@ await Promise.all([
         "Read the My Business Solutions Terms of Service governing your use of our website and services.",
     },
   ),
+  writePage(
+    template,
+    "sms-opt-in",
+    renderSmsOptInPage(),
+    {
+      title: "SMS Opt-In | My Business Solutions",
+      description:
+        "Evidence of the SMS consent process used by My Business Solutions LLC.",
+    },
+  ),
 ]);
 
-console.log("Prerendered /privacy-policy and /terms-of-service.");
+console.log("Prerendered /privacy-policy, /terms-of-service, and /sms-opt-in.");

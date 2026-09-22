@@ -31,6 +31,7 @@ const redirects = new Map([
   ["/blog/", "/blog"],
   ["/privacy-policy/", "/privacy-policy"],
   ["/terms-of-service/", "/terms-of-service"],
+  ["/sms-opt-in/", "/sms-opt-in"],
   ["/wp-content/uploads/2026/02/mbs-favicon.svg", "/favicon-512.png?v=3"],
 ]);
 
@@ -165,6 +166,14 @@ const pageMetadata = new Map([
       title: "Terms of Service | My Business Solutions",
       description:
         "Read the My Business Solutions Terms of Service governing your use of our website and services.",
+    },
+  ],
+  [
+    "/sms-opt-in",
+    {
+      title: "SMS Opt-In | My Business Solutions",
+      description:
+        "Evidence of the SMS consent process used by My Business Solutions LLC.",
     },
   ],
 ]);
