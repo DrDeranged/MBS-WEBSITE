@@ -17,7 +17,7 @@ const SECTIONS = [
   },
   {
     heading: "2. Amendments",
-    body: "MBS reserves the right to amend these Terms of Service at any time. MBS will post notice of any amendment on the Sites. You should review these Terms of Service regularly to ensure that you are aware of future amendments. If you do not agree to any amendment, you must stop using the Sites and Service. If you have any questions about the terms and conditions in these Terms of Service or MBS's Privacy Policy, please contact us at support@my-business-solutions.com.\n\nWe reserve the right to update and revise this Policy at any time. You can determine if this Policy has been revised since your last visit by referring to the \"Updated on\" date at the top of this page. Your use of the Web site constitutes your acceptance of the terms of the Policy. You should review this Policy regularly to ensure that you are aware of future amendments.",
+    body: "MBS reserves the right to amend these Terms of Service at any time. MBS will post notice of any amendment on the Sites. You should review these Terms of Service regularly to ensure that you are aware of future amendments. If you do not agree to any amendment, you must stop using the Sites and Service. If you have any questions about the terms and conditions in these Terms of Service or MBS's Privacy Policy, please contact us at funding@my-business-solutions.com.\n\nWe reserve the right to update and revise this Policy at any time. You can determine if this Policy has been revised since your last visit by referring to the \"Updated on\" date at the top of this page. Your use of the Web site constitutes your acceptance of the terms of the Policy. You should review this Policy regularly to ensure that you are aware of future amendments.",
   },
   {
     heading: "3. Definitions and Interpretation",
@@ -37,7 +37,7 @@ const SECTIONS = [
   },
   {
     heading: "15. Contact Information",
-    body: "My Business Solutions (MBS)\n617 Palisade Ave. Unit 2\nJersey City, New Jersey 07307\n(908) 860-8507\nsupport@my-business-solutions.com",
+    body: "My Business Solutions (MBS)\n617 Palisade Ave. Unit 2\nJersey City, New Jersey 07307\n(908) 860-8507\nfunding@my-business-solutions.com",
   },
 ];
 
